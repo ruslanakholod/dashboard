@@ -44,56 +44,34 @@ class App extends React.Component {
         const activeItem = this.state.activeItem;
         const lastItem = this.state.items.length - 1;
         let width = document.body.clientWidth;
+        let widthItem = document.getElementById(1).clientWidth;
+        let row = parseInt(width / widthItem);
 
-        // Event on key press
+
+        /* Event on key press */
+
+
+        // Press arrow up
 
         if (event.which === 38) {
-            if (width >= 1024) {
-                if (activeItem - 2 > 0) {
-                    this.setState({activeItem: activeItem - 3});
-                    window.scrollTo({
-                        top: this.state.activeItem,
-                        behavior: "smooth"
-                    });
-                } else if (activeItem === 0) {
-                    this.setState({activeItem: lastItem});
-                }
-            } else if (1024 > width && width >= 570) {
-                if (activeItem - 1 > 0) {
-                    this.setState({activeItem: activeItem - 2});
-                } else if (activeItem === 0) {
-                    this.setState({activeItem: lastItem});
-                }
-            } else if (width < 570) {
-                if (activeItem === 0) {
-                    this.setState({activeItem: lastItem});
-                } else {
-                    this.setState({activeItem: activeItem - 1});
-                }
+            if (activeItem - row >= 0) {
+                this.setState({activeItem: activeItem - row});
+            } else if (activeItem === 0) {
+                this.setState({activeItem: lastItem});
             }
         }
 
+        // Press arrow down
+
         if (event.which === 40) {
-            if (width >= 1024) {
-                if (activeItem + 2 < lastItem) {
-                    this.setState({activeItem: activeItem + 3});
-                } else if (activeItem === lastItem) {
-                    this.setState({activeItem: 0});
-                }
-            } else if (1024 > width && width >= 570) {
-                if (activeItem + 1 < lastItem) {
-                    this.setState({activeItem: activeItem + 2});
-                } else if (activeItem === lastItem) {
-                    this.setState({activeItem: 0});
-                }
-            } else if (width < 570) {
-                if (activeItem === lastItem) {
-                    this.setState({activeItem: 0});
-                } else {
-                    this.setState({activeItem: activeItem + 1});
-                }
+            if (activeItem + row <= lastItem) {
+                this.setState({activeItem: activeItem + row});
+            } else if (activeItem === lastItem) {
+                this.setState({activeItem: 0});
             }
         }
+
+        // Press arrow left
 
         if (event.which === 37) {
             if (activeItem === 0) {
@@ -103,6 +81,8 @@ class App extends React.Component {
             }
         }
 
+        // Press arrow right
+
         if (event.which === 39) {
             if (activeItem === this.state.items.length - 1) {
                 this.setState({activeItem: 0});
@@ -111,7 +91,7 @@ class App extends React.Component {
             }
         }
 
-        // Scroll to active element
+        /* Scroll to active element */
 
         const scrollElement = document.getElementById(this.state.activeItem + 1);
         const scrollToElement = scrollElement.offsetTop - 100;
@@ -129,7 +109,7 @@ class App extends React.Component {
                 title={item.title}
                 key={item.title}
                 onHover={() => this.handleHover(index)}
-                isActiveItem={this.state.activeItem === index ? true : false}
+                isActiveItem={this.state.activeItem === index}
                 id={index + 1}
             />
         ));
