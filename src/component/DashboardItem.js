@@ -1,8 +1,9 @@
 import React from 'react';
 import {css} from 'emotion';
 import Title from "./Title";
+import ToggleButton from "./ToggleButton";
 
-function DashboardItem({img, title, onHover, isActiveItem, id, handleChange}) {
+function DashboardItem({img, title, onHover, isActiveItem, id}) {
 
     return (
         <div
@@ -11,12 +12,15 @@ function DashboardItem({img, title, onHover, isActiveItem, id, handleChange}) {
             style={isActiveItem ? active : null}
             id={id}
         >
-            <div className={css`
-          ${styles.dashboard__item_img};
-          background-image: url(${img});
-        `}
-            />
-            <Title title={title}/>
+            <div className={styles.dashboard__item_wrapper}>
+                <ToggleButton/>
+                <div className={css`
+                  ${styles.dashboard__item_img};
+                  background-image: url(${img});
+                `}
+                />
+                <Title title={title}/>
+            </div>
         </div>
     );
 }
@@ -57,11 +61,15 @@ const styles = {
     }
   `,
 
+    dashboard__item_wrapper: css `
+    position: relative;
+    `,
+
     dashboard__item_img: css`
     min-height: 200px;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;
-  `
+  `,
 };
