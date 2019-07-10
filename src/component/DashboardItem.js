@@ -1,7 +1,9 @@
 import React from 'react';
 import {css} from 'emotion';
+import Title from "./Title";
 
-function DashboardItem({img, title, onHover, isActiveItem, id}) {
+function DashboardItem({img, title, onHover, isActiveItem, id, handleChange}) {
+
     return (
         <div
             className={styles.dashboard__item}
@@ -14,7 +16,7 @@ function DashboardItem({img, title, onHover, isActiveItem, id}) {
           background-image: url(${img});
         `}
             />
-            <p>{title}</p>
+            <Title title={title}/>
         </div>
     );
 }
