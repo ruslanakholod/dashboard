@@ -1,8 +1,7 @@
 import React from 'react';
 import {css} from 'emotion';
-import Title from "./Title";
 
-function DashboardItem({img, title, onHover, isActiveItem, id, handleChange}) {
+function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput}) {
 
     return (
         <div
@@ -16,7 +15,12 @@ function DashboardItem({img, title, onHover, isActiveItem, id, handleChange}) {
           background-image: url(${img});
         `}
             />
-            <Title title={title}/>
+            <input
+                className={styles.dashboard__item_title}
+                type="text"
+                value={title}
+                onChange={onChangeInput}
+            />
         </div>
     );
 }
@@ -63,5 +67,16 @@ const styles = {
     background-size: cover;
     background-repeat: no-repeat;
     cursor: pointer;
+  `,
+
+    dashboard__item_title: css`
+      width: 100%;
+      border: none;
+      outline-color: #566a77;
+      padding: 5px 15px;
+      font-weight: 500;
+      font-size: 15px;
+      color: white;
+      background-color: #1b2125;
   `
 };
