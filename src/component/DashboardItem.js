@@ -1,5 +1,6 @@
 import React from 'react';
 import {css} from 'emotion';
+import ToggleButton from "./ToggleButton";
 
 function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput}) {
 
@@ -10,17 +11,20 @@ function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput}) {
             style={isActiveItem ? active : null}
             id={id}
         >
-            <div className={css`
+            <div className={styles.dashboard__item_wrapper}>
+                <ToggleButton/>
+                <div className={css`
           ${styles.dashboard__item_img};
           background-image: url(${img});
         `}
-            />
-            <input
-                className={styles.dashboard__item_title}
-                type="text"
-                value={title}
-                onChange={onChangeInput}
-            />
+                />
+                <input
+                    className={styles.dashboard__item_title}
+                    type="text"
+                    value={title}
+                    onChange={onChangeInput}
+                />
+            </div>
         </div>
     );
 }
@@ -60,6 +64,10 @@ const styles = {
       background-color: #1b2125;
     }
   `,
+
+    dashboard__item_wrapper: css `
+    position: relative;
+    `,
 
     dashboard__item_img: css`
     min-height: 200px;
