@@ -1,11 +1,11 @@
 import React from 'react';
-import {injectGlobal, css} from 'emotion';
+import {injectGlobal, css, cx} from 'emotion';
 import DashboardItem from './component/DashboardItem';
+import ActionButton from './component/ActionButton';
 
 let id = 1;
 
 class App extends React.Component {
-
     state = {
         items: [
             {id: id++, img: "/images/img_1.JPG", title: "Title1"},
@@ -27,6 +27,23 @@ class App extends React.Component {
         });
     };
 
+    handleAddItem = () => {
+        const newItems = [{id: id++, title: '', img: ''}, ...this.state.items];
+        this.setState({items: newItems});
+    };
+
+    handleDeleteItem = (id) => {
+        const newItems = this.state.items.filter(item => item.id !== id);
+        console.log(newItems);
+        this.setState({items: newItems});
+    };
+
+    handleChangeInput = (event, id) => {
+        event.stopPropagation();
+        const newItems = this.state.items.map((item) => item.id === id ? {...item, title: event.target.value} : item);
+        this.setState({items: newItems});
+    };
+
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
     }
@@ -35,27 +52,15 @@ class App extends React.Component {
         document.removeEventListener("keydown", this.handleKeyPress);
     }
 
-    addNewItem = () => {
-        const newItems = this.state.items.map(item => ({...item, id: item.id + 1 }));
-        const item = {
-            id: 1,
-            title: '',
-            img: '',
-        };
-        newItems.unshift(item);
-        this.setState({items: newItems});
-    };
-
     handleKeyPress = event => {
-
         if (event.which === 37 || event.which === 38 || event.which === 39 || event.which === 40) {
             event.preventDefault();
             const activeItem = this.state.activeItem;
             const lastItem = this.state.items.length - 1;
             let width = document.body.clientWidth;
-            let widthItem = document.getElementById(1).clientWidth;
+            let firstItem = document.getElementsByClassName('dashboard')[0].firstChild;
+            let widthItem = firstItem.clientWidth;
             let row = parseInt(width / widthItem);
-
 
             /* Event on key press */
 
@@ -101,23 +106,14 @@ class App extends React.Component {
 
             /* Scroll to active element */
 
-            const scrollElement = document.getElementById(this.state.activeItem + 1);
+            const scrollElement = document.getElementsByClassName('active')[0];
             const scrollToElement = scrollElement.offsetTop - 100;
             window.scrollTo({
                 top: scrollToElement,
                 behavior: "smooth"
             });
-
         }
-
     };
-
-    handleChangeInput = (event, id) => {
-        event.stopPropagation();
-        const newItems = this.state.items.map((item) => item.id === id ? {...item, title: event.target.value} : item);
-        this.setState({items: newItems});
-    };
-
 
     render() {
         const dashboardItems = this.state.items.map((item, index) => (
@@ -130,31 +126,17 @@ class App extends React.Component {
                 isActiveItem={this.state.activeItem === index}
                 id={item.id}
                 onChangeInput={event => this.handleChangeInput(event, item.id)}
+                onDeleteItem={() => this.handleDeleteItem(item.id)}
             />
         ));
-
-        const Button = (
-            <button onClick={this.addNewItem}>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                     width="40px" height="40px" viewBox="0 0 612 612">
-                    <path d="M306,0C136.992,0,0,136.992,0,306s136.992,306,306,306s306-137.012,306-306S475.008,0,306,0z M306,573.75
-                                C158.125,573.75,38.25,453.875,38.25,306C38.25,158.125,158.125,38.25,306,38.25c147.875,0,267.75,119.875,267.75,267.75
-                                C573.75,453.875,453.875,573.75,306,573.75z M420.75,286.875h-95.625V191.25c0-10.557-8.568-19.125-19.125-19.125
-                                c-10.557,0-19.125,8.568-19.125,19.125v95.625H191.25c-10.557,0-19.125,8.568-19.125,19.125c0,10.557,8.568,19.125,19.125,19.125
-                                h95.625v95.625c0,10.557,8.568,19.125,19.125,19.125c10.557,0,19.125-8.568,19.125-19.125v-95.625h95.625
-                                c10.557,0,19.125-8.568,19.125-19.125C439.875,295.443,431.307,286.875,420.75,286.875z"
-                          fill='white'/>
-                </svg>
-            </button>
-        );
 
         return (
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        {Button}
+                        <ActionButton onClick={this.handleAddItem}/>
                     </div>
-                    <div className={styles.dashboard__wrapper}>{dashboardItems}</div>
+                    <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardItems}</div>
                 </div>
             </div>
         );
@@ -184,19 +166,13 @@ const container = {
 
 const styles = {
     dashboard__wrapper: css`
-    display: flex;
-    flex-wrap: wrap;
-    padding: 30px 0 50px 0;
-  `,
+      display: flex;
+      flex-wrap: wrap;
+      padding: 30px 0 50px 0;
+    `,
+
     dashboard__button: css`
-    text-align: right;
-    
-    button {
-    height: 40px;
-    margin: 20px 25px 0 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    }
+      text-align: right;
+      margin: 20px 25px 0 0;
     `
 };

@@ -1,81 +1,74 @@
 import React from 'react';
-import {css} from 'emotion';
+import {css, cx} from 'emotion';
 import ToggleButton from "./ToggleButton";
+import '.././App.css';
 
-function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput}) {
+function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem}) {
 
     return (
         <div
             className={styles.dashboard__item}
             onMouseMove={onHover}
-            style={isActiveItem ? active : null}
             id={id}
         >
-            <div className={styles.dashboard__item_wrapper}>
-                <ToggleButton/>
-                <div className={css`
-          ${styles.dashboard__item_img};
-          background-image: url(${img});
-        `}
-                />
+            <div className={cx(
+                { [cx(styles.dashboard__item_wrapper, 'active')]: isActiveItem },
+                { [styles.dashboard__item_wrapper]: !isActiveItem }
+            )}>
+                <div className={css` ${styles.dashboard__item_img}; background-image: url(${img}); `}>
+                    <ToggleButton onClick={onDeleteItem}/>
+                </div>
                 <input
                     className={styles.dashboard__item_title}
                     type="text"
                     value={title}
                     onChange={onChangeInput}
+                    placeholder='Add some text'
                 />
             </div>
         </div>
     );
 }
 
-export default DashboardItem;
-
-
-const active = {
-    border: "2px solid #176d8e",
-    borderRadius: "5px",
-    padding: "23px"
-};
-
 const styles = {
-
     dashboard__item: css`
-    cursor: pointer;
-    flex: 0 0 33.333333%;
-    max-width: 33.333333%;
-    padding: 25px;
+      cursor: pointer;
+      flex: 0 0 33.333333%;
+      max-width: 33.333333%;
+      padding: 10px;
 
-    @media (max-width: 1023px) and (min-width: 570px) {
-      flex: 0 0 50%;
-      max-width: 50%;
-    }
+      @media (max-width: 1023px) and (min-width: 570px) {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
 
-    @media (max-width: 569px) {
-      flex: 0 0 100%;
-      max-width: 100%;
-    }
+      @media (max-width: 569px) {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
 
-    p {
-      padding: 5px 15px;
-      font-weight: 500;
-      font-size: 15px;
-      color: white;
-      background-color: #1b2125;
-    }
-  `,
+      p {
+        padding: 5px 15px;
+        font-weight: 500;
+        font-size: 15px;
+        color: white;
+        background-color: #1b2125;
+      }
+   `,
 
     dashboard__item_wrapper: css `
-    position: relative;
+      position: relative;
+      padding: 15px;
     `,
 
     dashboard__item_img: css`
-    min-height: 200px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    cursor: pointer;
-  `,
+    position: relative;
+      min-height: 200px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    `,
 
     dashboard__item_title: css`
       width: 100%;
@@ -86,5 +79,7 @@ const styles = {
       font-size: 15px;
       color: white;
       background-color: #1b2125;
-  `
+    `
 };
+
+export default DashboardItem;

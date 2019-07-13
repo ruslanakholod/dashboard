@@ -1,33 +1,31 @@
 import React from 'react';
 import {css} from 'emotion';
+import {IoIosKeypad} from "react-icons/io";
+import {IconContext} from "react-icons";
 
 class ToggleButton extends React.Component {
-    constructor(props) {
-        super(props);
+    state = {
+        isHidden: true
+    };
 
-        this.state = {
-            isHidden: true
-        };
-
-        this.toggleHidden = this.toggleHidden.bind(this);
-    }
-
-    toggleHidden() {
+    toggleHidden = () => {
         this.setState({
             isHidden: !this.state.isHidden
         })
-    }
+    };
 
     render() {
         return (
             <div className={styles.dashboard__item_dropdown}>
                 <div onClick={this.toggleHidden}>
-                    <span className={styles.dots}/>
+                    <IconContext.Provider value={{color: "rgb(206, 206, 206)", size: "30px"}}>
+                        <IoIosKeypad/>
+                    </IconContext.Provider>
                 </div>
                 {!this.state.isHidden &&
                 <ul>
                     <li>Change image</li>
-                    <li>Delete</li>
+                    <li onClick={this.props.onClick}>Delete</li>
                 </ul>
                 }
             </div>
@@ -35,56 +33,32 @@ class ToggleButton extends React.Component {
     }
 }
 
-export default ToggleButton;
-
 const styles = {
     dashboard__item_dropdown: css`
-    position: absolute;
-    right: 0;
-    display: flex;
-    flex-direction: column;
+      position: absolute;
+      right: 0;
+      display: flex;
+      flex-direction: column;
         
-    ul {
-    display: inline-block;
-    list-style: none;
-    background-color: white;
+      ul {
+        display: inline-block;
+        margin-right: 10px;
+        list-style: none;
+        background-color: #ffffffba;
+        border-radius: 3px;
         li {
-        font-size: 13px;
-        padding: 5px;
+          font-size: 13px;
+          padding: 5px;
         }
-    }
+      }
     
-    div {
-    height: 23px;
-    width: 40px;
-    margin-left: auto;
-    }
-    `,
-    dots: css`
-     &, &:before, &:after {
-     position: absolute;
-     width: 7px;
-     height: 7px;
-     border-radius: 50%;
-     background-color: #a5aeb7;
-    }
-    
-    & {
-     top: 10px;
-     right: 15px;
-    }
-    
-    &:before {
-     content: "";
-     top: 0;
-     right: 10px;
-    }
-    
-    &:after {
-     content: "";
-     top: 0;
-     left: 10px;
-    }
-
+      div {
+        height: 30px;
+        margin: 10px 10px 0 auto;
+        background: #00000036;
+        border-radius: 5px;
+      }
     `
 };
+
+export default ToggleButton;
