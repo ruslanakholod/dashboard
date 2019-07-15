@@ -8,15 +8,15 @@ let id = 1;
 class App extends React.Component {
     state = {
         items: [
-            {id: id++, img: "/images/img_1.JPG", title: "Title1"},
-            {id: id++, img: "/images/img_2.JPG", title: "Title2"},
-            {id: id++, img: "/images/img_3.JPG", title: "Title3"},
-            {id: id++, img: "/images/img_4.JPG", title: "Title4"},
-            {id: id++, img: "/images/img_5.JPG", title: "Title5"},
-            {id: id++, img: "/images/img_6.JPG", title: "Title6"},
-            {id: id++, img: "/images/img_7.JPG", title: "Title7"},
-            {id: id++, img: "/images/img_8.JPG", title: "Title8"},
-            {id: id++, img: "/images/img_9.JPG", title: "Title9"}
+            {id: id++, image: "/images/img_1.JPG", title: "Title1"},
+            {id: id++, image: "/images/img_2.JPG", title: "Title2"},
+            {id: id++, image: "/images/img_3.JPG", title: "Title3"},
+            {id: id++, image: "/images/img_4.JPG", title: "Title4"},
+            {id: id++, image: "/images/img_5.JPG", title: "Title5"},
+            {id: id++, image: "/images/img_6.JPG", title: "Title6"},
+            {id: id++, image: "/images/img_7.JPG", title: "Title7"},
+            {id: id++, image: "/images/img_8.JPG", title: "Title8"},
+            {id: id++, image: "/images/img_9.JPG", title: "Title9"}
         ],
         activeItem: 0
     };
@@ -28,7 +28,7 @@ class App extends React.Component {
     };
 
     handleAddItem = () => {
-        const newItems = [{id: id++, title: '', img: ''}, ...this.state.items];
+        const newItems = [{id: id++, title: '', image: ''}, ...this.state.items];
         this.setState({items: newItems});
     };
 
@@ -115,17 +115,32 @@ class App extends React.Component {
         }
     };
 
+    handleImageChange = (event, id) => {
+        event.preventDefault();
+
+        let reader = new FileReader();
+        let file = event.target.files[0];
+
+        reader.onloadend = () => {
+            const newItems = this.state.items.map((item) => item.id === id ? {...item, image: reader.result} : item);
+            this.setState({items: newItems});
+
+        };
+        reader.readAsDataURL(file);
+    };
+
     render() {
         const dashboardItems = this.state.items.map((item, index) => (
             <DashboardItem
                 onKeyPress={this.handleKeyPress}
-                img={item.img}
+                image={item.image}
                 title={item.title}
                 key={item.id}
                 onHover={() => this.handleHover(index)}
                 isActiveItem={this.state.activeItem === index}
                 id={item.id}
                 onChangeInput={event => this.handleChangeInput(event, item.id)}
+                onChangeImage={event => this.handleImageChange(event, item.id)}
                 onDeleteItem={() => this.handleDeleteItem(item.id)}
             />
         ));

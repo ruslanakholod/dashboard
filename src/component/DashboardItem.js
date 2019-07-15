@@ -2,8 +2,9 @@ import React from 'react';
 import {css, cx} from 'emotion';
 import ToggleButton from "./ToggleButton";
 import '.././App.css';
+import ImageUpload from './ImageUpload';
 
-function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem}) {
+function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image}) {
 
     return (
         <div
@@ -12,11 +13,13 @@ function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput, on
             id={id}
         >
             <div className={cx(
-                { [cx(styles.dashboard__item_wrapper, 'active')]: isActiveItem },
-                { [styles.dashboard__item_wrapper]: !isActiveItem }
+                {[cx(styles.dashboard__item_wrapper, 'active')]: isActiveItem},
+                {[styles.dashboard__item_wrapper]: !isActiveItem}
             )}>
-                <div className={css` ${styles.dashboard__item_img}; background-image: url(${img}); `}>
-                    <ToggleButton onClick={onDeleteItem}/>
+                <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
+                    {!image && <ImageUpload onChange={onChangeImage} image={image}/>
+                    }
+                    <ToggleButton onClick={onDeleteItem} onChange={onChangeImage}/>
                 </div>
                 <input
                     className={styles.dashboard__item_title}
@@ -46,17 +49,9 @@ const styles = {
         flex: 0 0 100%;
         max-width: 100%;
       }
-
-      p {
-        padding: 5px 15px;
-        font-weight: 500;
-        font-size: 15px;
-        color: white;
-        background-color: #1b2125;
-      }
    `,
 
-    dashboard__item_wrapper: css `
+    dashboard__item_wrapper: css`
       position: relative;
       padding: 15px;
     `,

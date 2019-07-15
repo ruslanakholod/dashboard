@@ -24,7 +24,15 @@ class ToggleButton extends React.Component {
                 </div>
                 {!this.state.isHidden &&
                 <ul>
-                    <li>Change image</li>
+                    <li>
+                        <label>
+                            <p>Change image</p>
+                            <input
+                                   type="file"
+                                   onChange={this.props.onChange}
+                                   accept="image/*"/>
+                        </label>
+                    </li>
                     <li onClick={this.props.onClick}>Delete</li>
                 </ul>
                 }
@@ -36,6 +44,7 @@ class ToggleButton extends React.Component {
 const styles = {
     dashboard__item_dropdown: css`
       position: absolute;
+      top: 0;
       right: 0;
       display: flex;
       flex-direction: column;
@@ -46,9 +55,26 @@ const styles = {
         list-style: none;
         background-color: #ffffffba;
         border-radius: 3px;
+        
         li {
           font-size: 13px;
           padding: 5px;
+        }
+        
+        p {
+          font-size: 13px;
+          padding: 5px;
+        }
+        
+        input[type=file] {
+          position: absolute;
+          z-index: -1;
+          width: 1px;
+          height: 1px;
+          outline: 0;
+          opacity: 0;
+          pointer-events: none;
+          user-select: none
         }
       }
     
