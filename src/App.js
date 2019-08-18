@@ -27,10 +27,10 @@ class App extends React.Component {
         });
     };
 
-    handleAddItem = () => {
-        const newItems = [{id: id++, title: '', image: ''}, ...this.state.items];
-        this.setState({items: newItems});
-    };
+    // handleAddItem = () => {
+    //     const newItems = [{id: id++, title: '', image: ''}, ...this.state.items];
+    //     this.setState({items: newItems});
+    // };
 
     handleDeleteItem = (id) => {
         const newItems = this.state.items.filter(item => item.id !== id);
@@ -124,7 +124,6 @@ class App extends React.Component {
         reader.onloadend = () => {
             const newItems = this.state.items.map((item) => item.id === id ? {...item, image: reader.result} : item);
             this.setState({items: newItems});
-
         };
         reader.readAsDataURL(file);
     };
@@ -149,7 +148,7 @@ class App extends React.Component {
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        <ActionButton onClick={this.handleAddItem}/>
+                        <ActionButton />
                     </div>
                     <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardItems}</div>
                 </div>

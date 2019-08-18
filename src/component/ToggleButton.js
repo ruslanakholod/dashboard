@@ -26,7 +26,7 @@ class ToggleButton extends React.Component {
                 <ul>
                     <li>
                         <label>
-                            <p>Change image</p>
+                            <span>Change image</span>
                             <input
                                    type="file"
                                    onChange={this.props.onChange}
@@ -59,6 +59,11 @@ const styles = {
         li {
           font-size: 13px;
           padding: 5px;
+          cursor: pointer;
+          
+          label {
+            cursor: pointer;
+          }
         }
         
         p {
@@ -80,7 +85,7 @@ const styles = {
     
       div {
         height: 30px;
-        margin: 10px 10px 0 auto;
+        margin: 10px 10px 5px auto;
         background: #00000036;
         border-radius: 5px;
       }

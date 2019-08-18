@@ -8,7 +8,6 @@ class ImageUpload extends React.Component {
     render() {
 
         return (
-
             <label className={styles.image_upload}>
                 <div className={styles.image_upload__wrapper}>
                     <IconContext.Provider value={{color: "rgb(206, 206, 206)", size: "60px"}}>
@@ -20,7 +19,6 @@ class ImageUpload extends React.Component {
                            accept="image/*"/>
                 </div>
             </label>
-
         )
     }
 }
