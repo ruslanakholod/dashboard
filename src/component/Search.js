@@ -4,42 +4,48 @@ import {css} from 'emotion';
 class Search extends React.Component {
 
     state = {
-        list: [
-            "Go to the store",
-            "Netflix and Chill",
-            "Pets: Cats, Dogs, and Beyond"
-        ],
         filtered: []
     };
 
     componentDidMount() {
         this.setState({
-            filtered: this.state.list
+            filtered: this.props.apps
         });
     }
+
 
     handleChange = (e) => {
         let currentList = [];
         let newList = [];
 
         if (e.target.value !== "") {
-            currentList = this.state.list;
+            currentList = this.props.apps;
 
             const filter = e.target.value.trim().toLowerCase().split(' ');
             newList = currentList;
 
             filter.forEach(items => {
                 newList = newList.filter(item => {
-                    const lc = item.toLowerCase();
+                    const lc = item.title.toLowerCase();
                     return lc.indexOf(items) !== -1;
                 });
             })
         } else {
-            newList = this.state.list;
+            newList = this.props.apps;
         }
 
         this.setState({
             filtered: newList
+        });
+    };
+
+    handleAddApp = (id) => {
+        let newApp = {};
+        this.props.apps.forEach((item) => {
+            if (item.id === id) {
+                newApp = item;
+            }
+            return newApp;
         });
     };
 
@@ -51,8 +57,9 @@ class Search extends React.Component {
                 </div>
                 <ul>
                     {this.state.filtered.map(item => (
-                        <li key={item}>
-                            {item}
+                        <li key={item.title}>
+                            <p>{item.title}</p>
+                            <div onClick={() => this.handleAddApp(item.id)} >Add</div>
                         </li>
                     ))}
                 </ul>

@@ -18,6 +18,11 @@ class App extends React.Component {
             {id: id++, image: "/images/img_8.JPG", title: "Title8"},
             {id: id++, image: "/images/img_9.JPG", title: "Title9"}
         ],
+        apps: [
+            {id: 'la', image: "/images/img_9.JPG", title: "Go to the store"},
+            {id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill"},
+            {id: 'ga', image: "/images/img_5.JPG", title: "Pets: Cats, Dogs, and Beyond"}
+        ],
         activeItem: 0
     };
 
@@ -31,10 +36,12 @@ class App extends React.Component {
     //     const newItems = [{id: id++, title: '', image: ''}, ...this.state.items];
     //     this.setState({items: newItems});
     // };
+    handleAddApp = (id) => {
+        console.log(this.state.apps.map((item) => item.id ))
+    };
 
     handleDeleteItem = (id) => {
         const newItems = this.state.items.filter(item => item.id !== id);
-        console.log(newItems);
         this.setState({items: newItems});
     };
 
@@ -148,7 +155,7 @@ class App extends React.Component {
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        <ActionButton />
+                        <ActionButton apps={this.state.apps} addApp={() => this.handleAddApp(this.state.apps.id)}/>
                     </div>
                     <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardItems}</div>
                 </div>

@@ -42,7 +42,7 @@ class ActionButton extends React.Component {
                 <div ref={this.setWrapperRef} style={{display: 'inline-block'}}>
                     {!this.state.isHidden &&
                     <div  className={styles.apps_list}>
-                        <Search/>
+                        <Search apps={this.props.apps} onClick={this.props.addApp} />
                     </div>
                     }
                     <div className={styles.apps_button} onClick={this.toggleHidden}>
