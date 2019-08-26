@@ -1,13 +1,14 @@
 import React from 'react';
 import {injectGlobal, css, cx} from 'emotion';
-import DashboardItem from './component/DashboardItem';
-import ActionButton from './component/ActionButton';
+import DashboardApp from './component/DashboardApp';
+import Search from './component/Search';
+import RoundButton from './component/RoundButton';
 
 let id = 1;
 
 class App extends React.Component {
     state = {
-        items: [
+        addedApps: [
             {id: id++, image: "/images/img_1.JPG", title: "Title1"},
             {id: id++, image: "/images/img_2.JPG", title: "Title2"},
             {id: id++, image: "/images/img_3.JPG", title: "Title3"},
@@ -26,29 +27,21 @@ class App extends React.Component {
         activeItem: 0
     };
 
-    handleHover = indexItem => {
+    handleHover = indexApp => {
         this.setState({
-            activeItem: indexItem
+            activeItem: indexApp
         });
     };
 
-    // handleAddItem = () => {
-    //     const newItems = [{id: id++, title: '', image: ''}, ...this.state.items];
-    //     this.setState({items: newItems});
-    // };
-    handleAddApp = (id) => {
-        console.log(this.state.apps.map((item) => item.id ))
-    };
-
-    handleDeleteItem = (id) => {
-        const newItems = this.state.items.filter(item => item.id !== id);
-        this.setState({items: newItems});
+    handleDeleteApp = (id) => {
+        const newItems = this.state.addedApps.filter(item => item.id !== id);
+        this.setState({addedApps: newItems});
     };
 
     handleChangeInput = (event, id) => {
         event.stopPropagation();
-        const newItems = this.state.items.map((item) => item.id === id ? {...item, title: event.target.value} : item);
-        this.setState({items: newItems});
+        const newItems = this.state.addedApps.map((item) => item.id === id ? {...item, title: event.target.value} : item);
+        this.setState({addedApps: newItems});
     };
 
     componentDidMount() {
@@ -63,7 +56,7 @@ class App extends React.Component {
         if (event.which === 37 || event.which === 38 || event.which === 39 || event.which === 40) {
             event.preventDefault();
             const activeItem = this.state.activeItem;
-            const lastItem = this.state.items.length - 1;
+            const lastItem = this.state.addedApps.length - 1;
             let width = document.body.clientWidth;
             let firstItem = document.getElementsByClassName('dashboard')[0].firstChild;
             let widthItem = firstItem.clientWidth;
@@ -95,7 +88,7 @@ class App extends React.Component {
 
             if (event.which === 37) {
                 if (activeItem === 0) {
-                    this.setState({activeItem: this.state.items.length - 1});
+                    this.setState({activeItem: this.state.addedApps.length - 1});
                 } else {
                     this.setState({activeItem: activeItem - 1});
                 }
@@ -104,7 +97,7 @@ class App extends React.Component {
             // Press arrow right
 
             if (event.which === 39) {
-                if (activeItem === this.state.items.length - 1) {
+                if (activeItem === this.state.addedApps.length - 1) {
                     this.setState({activeItem: 0});
                 } else {
                     this.setState({activeItem: activeItem + 1});
@@ -129,25 +122,30 @@ class App extends React.Component {
         let file = event.target.files[0];
 
         reader.onloadend = () => {
-            const newItems = this.state.items.map((item) => item.id === id ? {...item, image: reader.result} : item);
-            this.setState({items: newItems});
+            const newItems = this.state.addedApps.map((item) => item.id === id ? {...item, image: reader.result} : item);
+            this.setState({addedApps: newItems});
         };
         reader.readAsDataURL(file);
     };
 
+    addAppToDashboard = (id) => {
+        const app = this.state.apps.find(app => app.id === id);
+        this.setState({ addedApps: [app, ...this.state.addedApps]})
+    };
+
     render() {
-        const dashboardItems = this.state.items.map((item, index) => (
-            <DashboardItem
+        const dashboardApps = this.state.addedApps.map((app, index) => (
+            <DashboardApp
                 onKeyPress={this.handleKeyPress}
-                image={item.image}
-                title={item.title}
-                key={item.id}
+                image={app.image}
+                title={app.title}
+                key={app.id}
                 onHover={() => this.handleHover(index)}
                 isActiveItem={this.state.activeItem === index}
-                id={item.id}
-                onChangeInput={event => this.handleChangeInput(event, item.id)}
-                onChangeImage={event => this.handleImageChange(event, item.id)}
-                onDeleteItem={() => this.handleDeleteItem(item.id)}
+                id={app.id}
+                onChangeInput={event => this.handleChangeInput(event, app.id)}
+                onChangeImage={event => this.handleImageChange(event, app.id)}
+                onDeleteItem={() => this.handleDeleteApp(app.id)}
             />
         ));
 
@@ -155,9 +153,10 @@ class App extends React.Component {
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        <ActionButton apps={this.state.apps} addApp={() => this.handleAddApp(this.state.apps.id)}/>
+                        <RoundButton search={<Search addApp={(id) => this.addAppToDashboard(id)}
+                                                     apps={this.state.apps}/>}/>
                     </div>
-                    <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardItems}</div>
+                    <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
                 </div>
             </div>
         );
@@ -175,7 +174,7 @@ injectGlobal`
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: Helvetica, Arial, sans-serif, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
   }
 `;
 
@@ -189,11 +188,11 @@ const styles = {
     dashboard__wrapper: css`
       display: flex;
       flex-wrap: wrap;
-      padding: 30px 0 50px 0;
+      padding: 50px 0 50px 0;
     `,
 
     dashboard__button: css`
       text-align: right;
-      margin: 20px 25px 0 0;
+      margin: 50px 25px 0 0;
     `
 };

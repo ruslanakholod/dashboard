@@ -4,7 +4,7 @@ import ToggleButton from "./ToggleButton";
 import '.././App.css';
 import ImageUpload from './ImageUpload';
 
-function DashboardItem({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image}) {
+function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image}) {
 
     return (
         <div
@@ -77,4 +77,4 @@ const styles = {
     `
 };
 
-export default DashboardItem;
+export default DashboardApp;

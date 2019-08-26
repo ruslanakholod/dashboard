@@ -4,48 +4,26 @@ import {css} from 'emotion';
 class Search extends React.Component {
 
     state = {
-        filtered: []
+        result: this.props.apps
     };
-
-    componentDidMount() {
-        this.setState({
-            filtered: this.props.apps
-        });
-    }
-
 
     handleChange = (e) => {
-        let currentList = [];
-        let newList = [];
+        let searchResult = [];
+        const searchRequest = e.target.value.trim().toLowerCase().split(' ');
 
-        if (e.target.value !== "") {
-            currentList = this.props.apps;
-
-            const filter = e.target.value.trim().toLowerCase().split(' ');
-            newList = currentList;
-
-            filter.forEach(items => {
-                newList = newList.filter(item => {
-                    const lc = item.title.toLowerCase();
-                    return lc.indexOf(items) !== -1;
-                });
-            })
-        } else {
-            newList = this.props.apps;
+        if(e.target.value.charAt(0) === ' ') {
+            e.target.value = '';
         }
 
-        this.setState({
-            filtered: newList
+        searchRequest.forEach(request => {
+            searchResult = this.props.apps.filter(app => {
+                const appTitle = app.title.toLowerCase();
+                return appTitle.indexOf(request) !== -1;
+            });
         });
-    };
 
-    handleAddApp = (id) => {
-        let newApp = {};
-        this.props.apps.forEach((item) => {
-            if (item.id === id) {
-                newApp = item;
-            }
-            return newApp;
+        this.setState({
+            result: searchResult
         });
     };
 
@@ -56,10 +34,13 @@ class Search extends React.Component {
                     <input type="text" className="input" onChange={this.handleChange} placeholder="Search..."/>
                 </div>
                 <ul>
-                    {this.state.filtered.map(item => (
-                        <li key={item.title}>
-                            <p>{item.title}</p>
-                            <div onClick={() => this.handleAddApp(item.id)} >Add</div>
+                    {this.state.result.map(app => (
+                        <li className={styles.list__app} key={app.title}>
+                            <div className={styles.list__app_left}>
+                                <div className={css`  ${styles.list__app_img}; background-image: url(${app.image}); `}/>
+                                <p className={styles.list__app_title}>{app.title}</p>
+                            </div>
+                            <div className={styles.list__app_button} onClick={() => this.props.addApp(app.id)}>Add</div>
                         </li>
                     ))}
                 </ul>
@@ -83,10 +64,67 @@ const styles = {
     list__search: css`
         input {
             width: 100%;
-            padding: 3px;
+            padding: 8px;
             border: 1px solid #00000099;
-            border-radius: 3px;
-            font-size: 15px;
+            border-radius: 8px;
+            font-size: 17px;
+            outline: none;
+        }
+    `,
+
+    list__app: css `
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+    `,
+
+    list__app_left: css `
+        display: flex;
+        align-items: center;
+    `,
+
+    list__app_img: css `
+        flex-shrink: 0;
+        margin-right: 20px;
+        width: 65px;
+        height: 65px;
+        border: 2px solid #000;
+        border-radius: 50%;
+        background-position: center;
+        background-size: cover;
+        
+        @media (max-width: 569px) {
+             width: 45px;
+             height: 45px;
+        }   
+    `,
+
+    list__app_title: css `
+        font-size: 20px;
+        
+        @media (max-width: 569px) {
+             font-size: 16px;
+        } 
+    `,
+    list__app_button: css `
+        padding: 5px 10px 4px 10px;
+        border: 2px solid #000;
+        border-radius: 6px;
+        font-size: 18px;
+        transition: 0.2s background;
+        cursor: pointer;
+        
+        @media (max-width: 569px) {
+             margin-left: 5px;
+             padding: 5px 8px 4px 8px;
+             font-size: 16px;
+        } 
+        
+        &:hover {
+            color: #fff;
+            background: #000;
+            transition: 0.2s background;
         }
     `
 };

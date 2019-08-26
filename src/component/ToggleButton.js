@@ -18,7 +18,7 @@ class ToggleButton extends React.Component {
         return (
             <div className={styles.dashboard__item_dropdown}>
                 <div onClick={this.toggleHidden}>
-                    <IconContext.Provider value={{color: "rgb(206, 206, 206)", size: "30px"}}>
+                    <IconContext.Provider value={{color: "rgb(241, 241, 241)", size: "30px"}}>
                         <IoIosKeypad/>
                     </IconContext.Provider>
                 </div>
@@ -51,14 +51,14 @@ const styles = {
         
       ul {
         display: inline-block;
-        margin-right: 10px;
+        margin-right: 20px;
         list-style: none;
         background-color: #ffffffba;
         border-radius: 3px;
         
         li {
-          font-size: 13px;
-          padding: 5px;
+          font-size: 14px;
+          padding: 8px;
           cursor: pointer;
           
           label {
@@ -67,8 +67,8 @@ const styles = {
         }
         
         p {
-          font-size: 13px;
-          padding: 5px;
+          font-size: 14px;
+          padding: 8px;
         }
         
         input[type=file] {
@@ -85,7 +85,7 @@ const styles = {
     
       div {
         height: 30px;
-        margin: 10px 10px 5px auto;
+        margin: 20px 20px 5px auto;
         background: #00000036;
         border-radius: 5px;
       }

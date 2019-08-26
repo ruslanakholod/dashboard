@@ -1,10 +1,9 @@
 import React from 'react';
 import {css} from 'emotion';
-import Search from './Search';
 import {IoIosAddCircleOutline} from "react-icons/io";
 import {IconContext} from "react-icons";
 
-class ActionButton extends React.Component {
+class RoundButton extends React.Component {
 
     state = {
         isHidden: false
@@ -42,7 +41,7 @@ class ActionButton extends React.Component {
                 <div ref={this.setWrapperRef} style={{display: 'inline-block'}}>
                     {!this.state.isHidden &&
                     <div  className={styles.apps_list}>
-                        <Search apps={this.props.apps} onClick={this.props.addApp} />
+                        {this.props.search}
                     </div>
                     }
                     <div className={styles.apps_button} onClick={this.toggleHidden}>
@@ -56,7 +55,7 @@ class ActionButton extends React.Component {
     }
 }
 
-export default ActionButton;
+export default RoundButton;
 
 const styles = {
     apps: css `
@@ -73,10 +72,17 @@ const styles = {
     apps_list: css `
         position: absolute;
         right: 60px;
-        min-width: 300px;
+        max-width: 600px;
+        width: 100%;
         min-height: 80px;
         z-index: 9;
         background: white;
-    `
+        
+        @media (max-width: 767px) {
+            top: 60px;
+            right: 0;
+            max-width: 100%;
+        }   
+        `
 };
 
