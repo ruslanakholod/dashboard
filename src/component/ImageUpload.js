@@ -1,6 +1,6 @@
 import React from "react";
 import {css} from "emotion";
-import { MdFileUpload } from "react-icons/md";
+import * as Icons from 'react-icons/md';
 import {IconContext} from "react-icons";
 import '.././App.css';
 
@@ -11,7 +11,7 @@ class ImageUpload extends React.Component {
             <label className={styles.image_upload}>
                 <div className={styles.image_upload__wrapper}>
                     <IconContext.Provider value={{color: "rgb(206, 206, 206)", size: "60px"}}>
-                        <MdFileUpload/>
+                        <MyIcon type={this.props.icon}/>
                     </IconContext.Provider>
                     <input
                            type="file"
@@ -22,6 +22,14 @@ class ImageUpload extends React.Component {
         )
     }
 }
+
+function MyIcon({type}) {
+    if (type === 'fileUpload') {
+        return <Icons.MdFileUpload/>;
+    }
+}
+
+export default ImageUpload;
 
 const styles = {
     image_upload: css`
@@ -49,5 +57,3 @@ const styles = {
       }
     `
 };
-
-export default ImageUpload;

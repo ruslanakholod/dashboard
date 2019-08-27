@@ -1,6 +1,6 @@
 import React from 'react';
 import {css} from 'emotion';
-import {IoIosKeypad} from "react-icons/io";
+import * as Icons from 'react-icons/io';
 import {IconContext} from "react-icons";
 
 class ToggleButton extends React.Component {
@@ -19,7 +19,7 @@ class ToggleButton extends React.Component {
             <div className={styles.dashboard__item_dropdown}>
                 <div onClick={this.toggleHidden}>
                     <IconContext.Provider value={{color: "rgb(241, 241, 241)", size: "30px"}}>
-                        <IoIosKeypad/>
+                        <MyIcon type={this.props.icon}/>
                     </IconContext.Provider>
                 </div>
                 {!this.state.isHidden &&
@@ -40,6 +40,14 @@ class ToggleButton extends React.Component {
         )
     }
 }
+
+function MyIcon({type}) {
+    if (type === 'keypad') {
+        return <Icons.IoIosKeypad/>;
+    }
+}
+
+export default ToggleButton;
 
 const styles = {
     dashboard__item_dropdown: css`
@@ -91,5 +99,3 @@ const styles = {
       }
     `
 };
-
-export default ToggleButton;

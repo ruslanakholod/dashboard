@@ -1,7 +1,7 @@
 import React from 'react';
 import {css} from 'emotion';
-import {IoIosAddCircleOutline} from "react-icons/io";
 import {IconContext} from "react-icons";
+import * as Icons from 'react-icons/io';
 
 class RoundButton extends React.Component {
 
@@ -35,6 +35,8 @@ class RoundButton extends React.Component {
         })
     };
 
+
+
     render() {
         return (
             <div className={styles.apps}>
@@ -46,12 +48,18 @@ class RoundButton extends React.Component {
                     }
                     <div className={styles.apps_button} onClick={this.toggleHidden}>
                         <IconContext.Provider value={{color: 'white', size: '40px'}}>
-                            <IoIosAddCircleOutline/>
+                            <MyIcon type={this.props.icon}/>
                         </IconContext.Provider>
                     </div>
                 </div>
             </div>
         )
+    }
+}
+
+function MyIcon({type}) {
+    if (type === 'round') {
+        return <Icons.IoIosAddCircleOutline/>;
     }
 }
 

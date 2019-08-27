@@ -4,6 +4,7 @@ import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
 
+
 let id = 1;
 
 class App extends React.Component {
@@ -133,6 +134,8 @@ class App extends React.Component {
         this.setState({ addedApps: [app, ...this.state.addedApps]})
     };
 
+
+
     render() {
         const dashboardApps = this.state.addedApps.map((app, index) => (
             <DashboardApp
@@ -153,7 +156,8 @@ class App extends React.Component {
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        <RoundButton search={<Search addApp={(id) => this.addAppToDashboard(id)}
+                        <RoundButton icon='round'
+                                     search={<Search addApp={(id) => this.addAppToDashboard(id)}
                                                      apps={this.state.apps}/>}/>
                     </div>
                     <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>

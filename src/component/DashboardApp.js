@@ -17,9 +17,9 @@ function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onD
                 {[styles.dashboard__item_wrapper]: !isActiveItem}
             )}>
                 <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
-                    {!image && <ImageUpload onChange={onChangeImage} image={image}/>
+                    {!image && <ImageUpload icon={'fileUpload'} onChange={onChangeImage} image={image}/>
                     }
-                    <ToggleButton onClick={onDeleteItem} onChange={onChangeImage}/>
+                    <ToggleButton icon={'keypad'} onClick={onDeleteItem} onChange={onChangeImage}/>
                 </div>
                 <input
                     className={styles.dashboard__item_title}
