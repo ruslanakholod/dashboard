@@ -3,6 +3,7 @@ import {injectGlobal, css, cx} from 'emotion';
 import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
+import Calculator from './apps/Calculator';
 
 
 let id = 1;
@@ -155,6 +156,7 @@ class App extends React.Component {
         return (
             <div>
                 <div style={container}>
+                    <Calculator/>
                     <div className={styles.dashboard__button}>
                         <RoundButton icon='round'
                                      search={<Search addApp={(id) => this.addAppToDashboard(id)}
