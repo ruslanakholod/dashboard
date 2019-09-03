@@ -1,65 +1,109 @@
 import React from 'react';
 import {css} from 'emotion';
 
+/* eslint no-eval: 0 */
+
 class Calculator extends React.Component {
 
     state = {
-        result: ''
+        result: '',
+        decimalAdded: false
     };
-
-    equal = () => {
-        let checkResult = this.state.result;
-        this.setState({
-            result: (eval(checkResult))
-        })
-    };
-
+    
     onClick = (e) => {
-        let result = this.state.result.toString();
-        let value = e.target.name.toString();
+        let resultVal = this.state.result.toString();
+        let btnVal = e.target.name.toString();
+        const operators = ['+', '-', '*', '/'];
 
-        if (value === '=') {
-            this.equal();
-        } else if (value === 'C') {
+        if (btnVal === 'C') {
             this.setState({
-                result: ''
+                result: '',
+                decimalAdded: false
             })
-        } else if (value === 'CE') {
+        } else if (btnVal === 'CE') {
             this.setState({
-                result: result.slice(0, -1)
+                result: resultVal.slice(0, -1)
             })
-        } else if (value === '0' && result === '0') {
+        }
+
+        // Replace 'Infinity' or 'NaN' with the newly pressed operator
+
+        else if (resultVal === "Infinity" || resultVal === "-Infinity" || resultVal === 'NaN') {
+            this.setState({
+                    result: btnVal
+                }
+            )
+        }
+
+        else if (btnVal === '0' && resultVal === '0') {
             this.setState({
                 result: '0'
             })
-        } else if (value === '.') {
-            if (result.indexOf(value) !== -1) {
+        }
+
+        // If eval key is pressed, calculate and display the result
+
+        else if (btnVal === '=') {
+            let equation = resultVal;
+            let lastChar = equation[equation.length - 1];
+
+            if (operators.indexOf(lastChar) > -1 || lastChar === '.')
+                equation = equation.replace(/.$/, '');
+
+            if (equation) {
                 this.setState({
-                    result: result
+                    result: eval(equation)
                 })
-            } else {
+            }
+
+            this.setState({
+                decimalAdded: false
+            })
+        } else if (operators.indexOf(btnVal) > -1) {
+
+            // last character from the equation
+
+            let lastChar = resultVal[resultVal.length - 1];
+
+            // Add operator if input is not empty and there is no operator at the last
+
+            if (resultVal !== '' && operators.indexOf(lastChar) === -1) {
                 this.setState({
-                    result: result + value
+                    result: resultVal + btnVal
+                })
+            }
+
+            // Replace the last operator (if exists) with the newly pressed operator
+
+            if (operators.indexOf(lastChar) > -1 && resultVal.length > 1) {
+
+                // '.' matches any character while $ denotes the end of string, so anything (will be an operator in this case) at the end of string will get replaced by new operator
+
+                this.setState({
+                    result: resultVal.replace(/.$/, btnVal)
+                })
+            }
+
+            this.setState({
+                decimalAdded: false
+            })
+        }
+
+        // Prevent more decimals to be added once it's set (It will be reset when an operator, eval or clear key is pressed)
+
+        else if (btnVal === '.') {
+            if (!this.state.decimalAdded) {
+                this.setState({
+                    result: this.state.result.toString() + btnVal,
+                    decimalAdded: true
                 })
             }
         } else {
-            if (result === '0' && value !== '.' && value !== '-' && value !== '/' && value !== '*') {
-                this.setState({
-                        result: value
-                    }
-                )
-            } else if (result === "Infinity" || result === "-Infinity" || result === 'NaN' ) {
-                this.setState({
-                        result: value
-                    }
-                )
-            } else {
-                this.setState({
-                        result: result + value
-                    }
-                )
-            }
+            this.setState({
+                result: this.state.result.toString() + btnVal
+            })
         }
+        e.preventDefault();
     };
 
 
@@ -70,9 +114,15 @@ class Calculator extends React.Component {
                     <div className={styles.calculator__result}>{this.state.result}</div>
                     <div className={styles.calculator__keypad}>
 
-                        <button name="C" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>C</button>
-                        <button name="CE" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>CE</button>
-                        <button name="=" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>=</button>
+                        <button name="C" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>C
+                        </button>
+                        <button name="CE" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>CE
+                        </button>
+                        <button name="=" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>=
+                        </button>
 
                         <button name="7" className={styles.keypad_button} onClick={e => this.onClick(e)}>7</button>
                         <button name="8" className={styles.keypad_button} onClick={e => this.onClick(e)}>8</button>
@@ -86,10 +136,18 @@ class Calculator extends React.Component {
                         <button name="." className={styles.keypad_button} onClick={e => this.onClick(e)}>.</button>
                         <button name="0" className={styles.keypad_button} onClick={e => this.onClick(e)}>0</button>
 
-                        <button name="+" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>+</button>
-                        <button name="-" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>-</button>
-                        <button name="*" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>x</button>
-                        <button name="/" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `} onClick={e => this.onClick(e)}>÷</button>
+                        <button name="+" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>+
+                        </button>
+                        <button name="-" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>-
+                        </button>
+                        <button name="*" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>x
+                        </button>
+                        <button name="/" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
+                                onClick={e => this.onClick(e)}>÷
+                        </button>
 
                     </div>
                 </div>
@@ -130,4 +188,4 @@ const styles = {
         background: #cac7c7;
         color: #000;
     `
-}
+};
