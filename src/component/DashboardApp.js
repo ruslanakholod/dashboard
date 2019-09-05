@@ -3,6 +3,7 @@ import {css, cx} from 'emotion';
 import ToggleButton from "./ToggleButton";
 import '.././App.css';
 import ImageUpload from './ImageUpload';
+import SmallButton from "./SmallButton";
 
 function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image}) {
 
@@ -19,7 +20,20 @@ function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onD
                 <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
                     {!image && <ImageUpload icon={'fileUpload'} onChange={onChangeImage} image={image}/>
                     }
-                    <ToggleButton icon={'keypad'} onClick={onDeleteItem} onChange={onChangeImage}/>
+                    <SmallButton styleButton={button} icon={'keypad'}>
+                        <ul className={styles.list}>
+                            <li>
+                                <label>
+                                    <span>Change image</span>
+                                    <input
+                                        type="file"
+                                        onChange={onChangeImage}
+                                        accept="image/*"/>
+                                </label>
+                            </li>
+                            <li onClick={onDeleteItem}>Delete</li>
+                        </ul>
+                    </SmallButton>
                 </div>
                 <input
                     className={styles.dashboard__item_title}
@@ -31,6 +45,13 @@ function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onD
             </div>
         </div>
     );
+}
+
+const button = {
+    height: '30px',
+    margin: '20px 20px 5px auto',
+    background: '#00000036',
+    borderRadius: '5px'
 }
 
 const styles = {
@@ -74,6 +95,42 @@ const styles = {
       font-size: 15px;
       color: white;
       background-color: #1b2125;
+    `,
+
+    list: css`
+        
+        display: inline-block;
+        margin-right: 20px;
+        list-style: none;
+        background-color: #ffffffba;
+        border-radius: 3px;
+        
+        li {
+          font-size: 14px;
+          padding: 8px;
+          cursor: pointer;
+          
+          label {
+            cursor: pointer;
+          }
+        }
+        
+        p {
+          font-size: 14px;
+          padding: 8px;
+        }
+        
+        input[type=file] {
+          position: absolute;
+          z-index: -1;
+          width: 1px;
+          height: 1px;
+          outline: 0;
+          opacity: 0;
+          pointer-events: none;
+          user-select: none
+        }
+    
     `
 };
 
