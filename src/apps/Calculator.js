@@ -1,5 +1,5 @@
 import React from 'react';
-import {css} from 'emotion';
+import {css, cx} from 'emotion';
 
 /* eslint no-eval: 0 */
 
@@ -9,7 +9,7 @@ class Calculator extends React.Component {
         result: '',
         decimalAdded: false
     };
-    
+
     onClick = (e) => {
         let resultVal = this.state.result.toString();
         let btnVal = e.target.name.toString();
@@ -108,47 +108,26 @@ class Calculator extends React.Component {
 
 
     render() {
+
+        const signs = [
+            'C', 'CE', '=', 7, 8, 9, 4, 5, 6, 1, 2, 3, '.', 0, '+', '-', '*', '/'
+        ];
+
         return (
             <div>
                 <div className={styles.calculator}>
                     <div className={styles.calculator__result}>{this.state.result}</div>
                     <div className={styles.calculator__keypad}>
-
-                        <button name="C" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>C
-                        </button>
-                        <button name="CE" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>CE
-                        </button>
-                        <button name="=" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>=
-                        </button>
-
-                        <button name="7" className={styles.keypad_button} onClick={e => this.onClick(e)}>7</button>
-                        <button name="8" className={styles.keypad_button} onClick={e => this.onClick(e)}>8</button>
-                        <button name="9" className={styles.keypad_button} onClick={e => this.onClick(e)}>9</button>
-                        <button name="4" className={styles.keypad_button} onClick={e => this.onClick(e)}>4</button>
-                        <button name="5" className={styles.keypad_button} onClick={e => this.onClick(e)}>5</button>
-                        <button name="6" className={styles.keypad_button} onClick={e => this.onClick(e)}>6</button>
-                        <button name="1" className={styles.keypad_button} onClick={e => this.onClick(e)}>1</button>
-                        <button name="2" className={styles.keypad_button} onClick={e => this.onClick(e)}>2</button>
-                        <button name="3" className={styles.keypad_button} onClick={e => this.onClick(e)}>3</button>
-                        <button name="." className={styles.keypad_button} onClick={e => this.onClick(e)}>.</button>
-                        <button name="0" className={styles.keypad_button} onClick={e => this.onClick(e)}>0</button>
-
-                        <button name="+" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>+
-                        </button>
-                        <button name="-" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>-
-                        </button>
-                        <button name="*" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>x
-                        </button>
-                        <button name="/" className={css` ${styles.keypad_button}; ${styles.keypad_button_main}; `}
-                                onClick={e => this.onClick(e)}>÷
-                        </button>
-
+                        {signs.map((sign) => (
+                            <button key={sign} name={sign}
+                                    className={cx(
+                                        {[cx(styles.keypad_button)]: sign !== '=' || sign !== '+' || sign !== '-' || sign !== '/' || sign !== '*' || sign !== 'C' || sign !== 'CE'},
+                                        {[css` ${styles.keypad_button}; ${styles.keypad_button_main}; `]: sign === '=' || sign === '+' || sign === '-' || sign === '/' || sign === '*' || sign === 'C' || sign === 'CE'}
+                                    )}
+                                    onClick={e => this.onClick(e)}>
+                                {sign}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -170,9 +149,6 @@ const styles = {
         border-radius: 5px;
         font-size: 20px;
         background: white;
-    `,
-    calculator__keypad: css`
-        
     `,
     keypad_button: css`
         width: calc(100% / 3);
