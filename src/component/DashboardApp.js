@@ -1,61 +1,56 @@
 import React from 'react';
-import {css, cx} from 'emotion';
+import { css, cx } from 'emotion';
 import ToggleButton from "./ToggleButton";
 import '.././App.css';
 import ImageUpload from './ImageUpload';
 import SmallButton from "./SmallButton";
+import { Colors, Icons, Size } from '../variables';
 
-function DashboardApp({img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image}) {
 
-    return (
-        <div
-            className={styles.dashboard__item}
-            onMouseMove={onHover}
-            id={id}
-        >
-            <div className={cx(
-                {[cx(styles.dashboard__item_wrapper, 'active')]: isActiveItem},
-                {[styles.dashboard__item_wrapper]: !isActiveItem}
-            )}>
-                <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
-                    {!image && <ImageUpload icon={'fileUpload'} onChange={onChangeImage} image={image}/>
-                    }
-                    <SmallButton styleButton={button} icon={'keypad'}>
-                        <ul className={styles.list}>
-                            <li>
-                                <label>
-                                    <span>Change image</span>
-                                    <input
-                                        type="file"
-                                        onChange={onChangeImage}
-                                        accept="image/*"/>
-                                </label>
-                            </li>
-                            <li onClick={onDeleteItem}>Delete</li>
-                        </ul>
-                    </SmallButton>
-                </div>
-                <input
-                    className={styles.dashboard__item_title}
-                    type="text"
-                    value={title}
-                    onChange={onChangeInput}
-                    placeholder='Add some text'
-                />
-            </div>
+function DashboardApp({ img, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image }) {
+
+  return (
+    <div
+      className={styles.dashboard__item}
+      onMouseMove={onHover}
+      id={id}
+    >
+      <div className={cx(
+        { [cx(styles.dashboard__item_wrapper, 'active')]: isActiveItem },
+        { [styles.dashboard__item_wrapper]: !isActiveItem }
+      )}>
+        <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
+          {!image && <ImageUpload icon={Icons.fileUpload} color={Colors.grayLight} size={Size.big} onChange={onChangeImage} image={image} />
+          }
+          <SmallButton color={Colors.white} size={Size.small} icon={Icons.keypad}>
+            <ul className={styles.list}>
+              <li>
+                <label>
+                  <span>Change image</span>
+                  <input
+                    type="file"
+                    onChange={onChangeImage}
+                    accept="image/*" />
+                </label>
+              </li>
+              <li onClick={onDeleteItem}>Delete</li>
+            </ul>
+          </SmallButton>
         </div>
-    );
-}
-
-const button = {
-    height: '30px',
-    margin: '20px 20px 5px auto',
-    background: '#00000036',
-    borderRadius: '5px'
+        <input
+          className={styles.dashboard__item_title}
+          type="text"
+          value={title}
+          onChange={onChangeInput}
+          placeholder='Add some text'
+        />
+      </div>
+    </div>
+  );
 }
 
 const styles = {
-    dashboard__item: css`
+  dashboard__item: css`
       cursor: pointer;
       flex: 0 0 33.333333%;
       max-width: 33.333333%;
@@ -72,12 +67,12 @@ const styles = {
       }
    `,
 
-    dashboard__item_wrapper: css`
+  dashboard__item_wrapper: css`
       position: relative;
       padding: 15px;
     `,
 
-    dashboard__item_img: css`
+  dashboard__item_img: css`
     position: relative;
       min-height: 200px;
       background-position: center;
@@ -86,7 +81,7 @@ const styles = {
       cursor: pointer;
     `,
 
-    dashboard__item_title: css`
+  dashboard__item_title: css`
       width: 100%;
       border: none;
       outline-color: #566a77;
@@ -97,7 +92,7 @@ const styles = {
       background-color: #1b2125;
     `,
 
-    list: css`
+  list: css`
         
         display: inline-block;
         margin-right: 20px;

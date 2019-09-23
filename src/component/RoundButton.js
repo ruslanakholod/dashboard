@@ -1,7 +1,6 @@
 import React from 'react';
-import {css} from 'emotion';
-import {IconContext} from "react-icons";
-import * as Icons from 'react-icons/io';
+import { css } from 'emotion';
+import { GetIcon } from '../variables';
 
 class RoundButton extends React.Component {
 
@@ -40,16 +39,14 @@ class RoundButton extends React.Component {
     render() {
         return (
             <div className={styles.apps}>
-                <div ref={this.setWrapperRef} style={{display: 'inline-block'}}>
+                <div ref={this.setWrapperRef} style={{ display: 'inline-block' }}>
                     {!this.state.isHidden &&
-                    <div  className={styles.apps_list}>
-                        {this.props.search}
-                    </div>
+                        <div className={styles.apps_list}>
+                            {this.props.search}
+                        </div>
                     }
                     <div className={styles.apps_button} onClick={this.toggleHidden}>
-                        <IconContext.Provider value={{color: 'white', size: '40px'}}>
-                            <MyIcon type={this.props.icon}/>
-                        </IconContext.Provider>
+                        <GetIcon type={this.props.icon} color={this.props.color} size={this.props.size} />
                     </div>
                 </div>
             </div>
@@ -57,31 +54,27 @@ class RoundButton extends React.Component {
     }
 }
 
-function MyIcon({type}) {
-    if (type === 'round') {
-        return <Icons.IoIosAddCircleOutline/>;
-    }
-}
-
 export default RoundButton;
 
 const styles = {
-    apps: css `
+    apps: css`
         display: flex;
         justify-content: flex-end;
         position: relative;
     `,
 
-    apps_button: css `
+    apps_button: css`
         display: inline-block;
         cursor: pointer;
     `,
 
-    apps_list: css `
+    apps_list: css`
         position: absolute;
         right: 60px;
         max-width: 600px;
         width: 100%;
+        max-height: 500px;
+        overflow: scroll;
         min-height: 80px;
         z-index: 9;
         background: white;

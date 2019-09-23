@@ -1,9 +1,10 @@
 import React from 'react';
-import {injectGlobal, css, cx} from 'emotion';
+import { injectGlobal, css, cx } from 'emotion';
 import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
 import Calculator from './apps/Calculator';
+import { Colors, Icons, Size } from './variables';
 
 
 let id = 1;
@@ -11,20 +12,26 @@ let id = 1;
 class App extends React.Component {
     state = {
         addedApps: [
-            {id: id++, image: "/images/img_1.JPG", title: "Title1"},
-            {id: id++, image: "/images/img_2.JPG", title: "Title2"},
-            {id: id++, image: "/images/img_3.JPG", title: "Title3"},
-            {id: id++, image: "/images/img_4.JPG", title: "Title4"},
-            {id: id++, image: "/images/img_5.JPG", title: "Title5"},
-            {id: id++, image: "/images/img_6.JPG", title: "Title6"},
-            {id: id++, image: "/images/img_7.JPG", title: "Title7"},
-            {id: id++, image: "/images/img_8.JPG", title: "Title8"},
-            {id: id++, image: "/images/img_9.JPG", title: "Title9"}
+            { id: id++, image: "/images/img_1.JPG", title: "Title1" },
+            { id: id++, image: "/images/img_2.JPG", title: "Title2" },
+            { id: id++, image: "/images/img_3.JPG", title: "Title3" },
+            { id: id++, image: "/images/img_4.JPG", title: "Title4" },
+            { id: id++, image: "/images/img_5.JPG", title: "Title5" },
+            { id: id++, image: "/images/img_6.JPG", title: "Title6" },
+            { id: id++, image: "/images/img_7.JPG", title: "Title7" },
+            { id: id++, image: "/images/img_8.JPG", title: "Title8" },
+            { id: id++, image: "/images/img_9.JPG", title: "Title9" }
         ],
         apps: [
-            {id: 'la', image: "/images/img_9.JPG", title: "Go to the store"},
-            {id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill"},
-            {id: 'ga', image: "/images/img_5.JPG", title: "Pets: Cats, Dogs, and Beyond"}
+            { id: 'la', image: "/images/img_9.JPG", title: "Go to the store" },
+            { id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill" },
+            { id: 'ga', image: "/images/img_5.JPG", title: "Pets: Cats, Dogs, and Beyond" },
+            { id: id++, image: "/images/img_1.JPG", title: "Title1" },
+            { id: id++, image: "/images/img_2.JPG", title: "Title2" },
+            { id: id++, image: "/images/img_5.JPG", title: "Title5" },
+            { id: id++, image: "/images/img_6.JPG", title: "Title6" },
+            { id: id++, image: "/images/img_7.JPG", title: "Title7" },
+            { id: id++, image: "/images/img_8.JPG", title: "Title8" }
         ],
         activeItem: 0
     };
@@ -37,13 +44,13 @@ class App extends React.Component {
 
     handleDeleteApp = (id) => {
         const newItems = this.state.addedApps.filter(item => item.id !== id);
-        this.setState({addedApps: newItems});
+        this.setState({ addedApps: newItems });
     };
 
     handleChangeInput = (event, id) => {
         event.stopPropagation();
-        const newItems = this.state.addedApps.map((item) => item.id === id ? {...item, title: event.target.value} : item);
-        this.setState({addedApps: newItems});
+        const newItems = this.state.addedApps.map((item) => item.id === id ? { ...item, title: event.target.value } : item);
+        this.setState({ addedApps: newItems });
     };
 
     componentDidMount() {
@@ -70,9 +77,9 @@ class App extends React.Component {
 
             if (event.which === 38) {
                 if (activeItem - row >= 0) {
-                    this.setState({activeItem: activeItem - row});
+                    this.setState({ activeItem: activeItem - row });
                 } else if (activeItem === 0) {
-                    this.setState({activeItem: lastItem});
+                    this.setState({ activeItem: lastItem });
                 }
             }
 
@@ -80,9 +87,9 @@ class App extends React.Component {
 
             if (event.which === 40) {
                 if (activeItem + row <= lastItem) {
-                    this.setState({activeItem: activeItem + row});
+                    this.setState({ activeItem: activeItem + row });
                 } else if (activeItem === lastItem) {
-                    this.setState({activeItem: 0});
+                    this.setState({ activeItem: 0 });
                 }
             }
 
@@ -90,9 +97,9 @@ class App extends React.Component {
 
             if (event.which === 37) {
                 if (activeItem === 0) {
-                    this.setState({activeItem: this.state.addedApps.length - 1});
+                    this.setState({ activeItem: this.state.addedApps.length - 1 });
                 } else {
-                    this.setState({activeItem: activeItem - 1});
+                    this.setState({ activeItem: activeItem - 1 });
                 }
             }
 
@@ -100,9 +107,9 @@ class App extends React.Component {
 
             if (event.which === 39) {
                 if (activeItem === this.state.addedApps.length - 1) {
-                    this.setState({activeItem: 0});
+                    this.setState({ activeItem: 0 });
                 } else {
-                    this.setState({activeItem: activeItem + 1});
+                    this.setState({ activeItem: activeItem + 1 });
                 }
             }
 
@@ -124,15 +131,15 @@ class App extends React.Component {
         let file = event.target.files[0];
 
         reader.onloadend = () => {
-            const newItems = this.state.addedApps.map((item) => item.id === id ? {...item, image: reader.result} : item);
-            this.setState({addedApps: newItems});
+            const newItems = this.state.addedApps.map((item) => item.id === id ? { ...item, image: reader.result } : item);
+            this.setState({ addedApps: newItems });
         };
         reader.readAsDataURL(file);
     };
 
     addAppToDashboard = (id) => {
         const app = this.state.apps.find(app => app.id === id);
-        this.setState({ addedApps: [app, ...this.state.addedApps]})
+        this.setState({ addedApps: [app, ...this.state.addedApps] })
     };
 
 
@@ -156,11 +163,11 @@ class App extends React.Component {
         return (
             <div>
                 <div style={container}>
-                    <Calculator/>
+                    {/* <Calculator /> */}
                     <div className={styles.dashboard__button}>
-                        <RoundButton icon='round'
-                                     search={<Search addApp={(id) => this.addAppToDashboard(id)}
-                                                     apps={this.state.apps}/>}/>
+                        <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.medium}
+                            search={<Search addApp={(id) => this.addAppToDashboard(id)}
+                                apps={this.state.apps} />} />
                     </div>
                     <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
                 </div>
@@ -199,6 +206,6 @@ const styles = {
 
     dashboard__button: css`
       text-align: right;
-      margin: 50px 25px 0 0;
+      margin: 90px 25px 0 0;
     `
 };
