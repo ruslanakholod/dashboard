@@ -142,8 +142,6 @@ class App extends React.Component {
         this.setState({ addedApps: [app, ...this.state.addedApps] })
     };
 
-
-
     render() {
         const dashboardApps = this.state.addedApps.map((app, index) => (
             <DashboardApp
@@ -167,7 +165,7 @@ class App extends React.Component {
                     <div className={styles.dashboard__button}>
                         <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.medium}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
-                                apps={this.state.apps} />} />
+                                apps={this.state.apps} addedApps={this.state.addedApps} />} />
                     </div>
                     <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
                 </div>

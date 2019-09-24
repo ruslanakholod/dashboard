@@ -1,5 +1,5 @@
 import React from 'react';
-import {css} from 'emotion';
+import { css, cx } from 'emotion';
 
 class Search extends React.Component {
 
@@ -11,7 +11,7 @@ class Search extends React.Component {
         let searchResult = [];
         const searchRequest = e.target.value.trim().toLowerCase().split(' ');
 
-        if(e.target.value.charAt(0) === ' ') {
+        if (e.target.value.charAt(0) === ' ') {
             e.target.value = '';
         }
 
@@ -27,20 +27,28 @@ class Search extends React.Component {
         });
     };
 
+    isAdded = (id) => {
+        return this.props.addedApps.some(app => app.id === id);
+    }
+
     render() {
         return (
             <div className={styles.list__wrapper}>
                 <div className={styles.list__search}>
-                    <input type="text" className="input" onChange={this.handleChange} placeholder="Search..."/>
+                    <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
                 </div>
                 <ul>
                     {this.state.result.map(app => (
                         <li className={styles.list__app} key={app.title}>
                             <div className={styles.list__app_left}>
-                                <div className={css`  ${styles.list__app_img}; background-image: url(${app.image}); `}/>
+                                <div className={css`  ${styles.list__app_img}; background-image: url(${app.image}); `} />
                                 <p className={styles.list__app_title}>{app.title}</p>
                             </div>
-                            <div className={styles.list__app_button} onClick={() => this.props.addApp(app.id)}>Add</div>
+                            {this.isAdded(app.id) ?
+                                <div className={cx(styles.list__app_button, styles.list__app_button_added)}>Added</div>
+                                :
+                                <div className={styles.list__app_button} onClick={() => this.props.addApp(app.id)}>Add</div>
+                            }
                         </li>
                     ))}
                 </ul>
@@ -72,19 +80,19 @@ const styles = {
         }
     `,
 
-    list__app: css `
+    list__app: css`
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 0;
     `,
 
-    list__app_left: css `
+    list__app_left: css`
         display: flex;
         align-items: center;
     `,
 
-    list__app_img: css `
+    list__app_img: css`
         flex-shrink: 0;
         margin-right: 20px;
         width: 65px;
@@ -100,14 +108,14 @@ const styles = {
         }   
     `,
 
-    list__app_title: css `
+    list__app_title: css`
         font-size: 20px;
         
         @media (max-width: 569px) {
              font-size: 16px;
         } 
     `,
-    list__app_button: css `
+    list__app_button: css`
         padding: 5px 10px 4px 10px;
         border: 2px solid #000;
         border-radius: 6px;
@@ -126,5 +134,10 @@ const styles = {
             background: #000;
             transition: 0.2s background;
         }
+    `,
+
+    list__app_button_added: css`
+       background: #000;
+       color: #fff; 
     `
 };

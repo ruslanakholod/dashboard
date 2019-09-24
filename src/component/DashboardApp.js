@@ -1,6 +1,5 @@
 import React from 'react';
 import { css, cx } from 'emotion';
-import ToggleButton from "./ToggleButton";
 import '.././App.css';
 import ImageUpload from './ImageUpload';
 import SmallButton from "./SmallButton";
