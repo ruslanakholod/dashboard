@@ -5,7 +5,7 @@ import { GetIcon } from '../variables';
 class RoundButton extends React.Component {
 
     state = {
-        isHidden: false
+        isHidden: true
     };
 
     componentWillUnmount() {

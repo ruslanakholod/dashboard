@@ -13,9 +13,29 @@ class SmallButton extends React.Component {
     })
   };
 
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+  }
+
+  componentWillMount() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
+  setWrapperRef = (node) => {
+    this.wrapperRef = node;
+  };
+
+  handleClickOutside = (event) => {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({
+        isHidden: true
+      })
+    }
+  };
+
   render() {
     return (
-      <div className={styles.dashboard__item_dropdown}>
+      <div ref={this.setWrapperRef} className={styles.dashboard__item_dropdown}>
         <div className={styles.button} onClick={this.toggleHidden}>
           <GetIcon type={this.props.icon} color={this.props.color} size={this.props.size} />
         </div>

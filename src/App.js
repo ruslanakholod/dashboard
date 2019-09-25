@@ -161,7 +161,7 @@ class App extends React.Component {
         return (
             <div>
                 <div style={container}>
-                    {/* <Calculator /> */}
+                    <Calculator />
                     <div className={styles.dashboard__button}>
                         <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.medium}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
