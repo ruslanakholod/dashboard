@@ -219,6 +219,7 @@ const styles = {
         background: #676666;
         color: #fff;
         outline: none;
+        cursor: pointer;
     `,
     keypad_button_main: css`
         background: #cac7c7;

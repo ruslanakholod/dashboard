@@ -17,7 +17,8 @@ export const Size = {
 export const Icons = {
     keypad: 'keypad',
     circlePlus: 'circlePlus',
-    fileUpload: 'fileUpload'
+    fileUpload: 'fileUpload',
+    close: 'close'
 }
 
 
@@ -28,5 +29,7 @@ export function GetIcon({ type, size, color }) {
         return <IconIo.IoIosAddCircleOutline color={color} size={size} />;
     } else if (type === 'fileUpload') {
         return <IconMd.MdFileUpload color={color} size={size} />;
+    } else if (type === 'close') {
+        return <IconIo.IoIosCloseCircleOutline color={color} size={size} />;
     }
 }

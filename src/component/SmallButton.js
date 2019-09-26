@@ -58,6 +58,7 @@ const styles = {
       right: 0;
       display: flex;
       flex-direction: column;
+      z-index: 1;
   `,
 
   button: css`

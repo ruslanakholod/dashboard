@@ -5,6 +5,8 @@ import Search from './component/Search';
 import RoundButton from './component/RoundButton';
 import Calculator from './apps/Calculator';
 import { Colors, Icons, Size } from './variables';
+import { BrowserRouter as Router } from "react-router-dom";
+
 
 
 let id = 1;
@@ -12,15 +14,9 @@ let id = 1;
 class App extends React.Component {
     state = {
         addedApps: [
-            { id: id++, image: "/images/img_1.JPG", title: "Title1" },
-            { id: id++, image: "/images/img_2.JPG", title: "Title2" },
-            { id: id++, image: "/images/img_3.JPG", title: "Title3" },
-            { id: id++, image: "/images/img_4.JPG", title: "Title4" },
-            { id: id++, image: "/images/img_5.JPG", title: "Title5" },
-            { id: id++, image: "/images/img_6.JPG", title: "Title6" },
-            { id: id++, image: "/images/img_7.JPG", title: "Title7" },
-            { id: id++, image: "/images/img_8.JPG", title: "Title8" },
-            { id: id++, image: "/images/img_9.JPG", title: "Title9" }
+            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
+            { id: id++, image: "/images/img_2.JPG", title: "Title2", component: '' },
+            { id: id++, image: "/images/img_3.JPG", title: "Title3", component: <Calculator /> }
         ],
         apps: [
             { id: 'la', image: "/images/img_9.JPG", title: "Go to the store" },
@@ -144,11 +140,13 @@ class App extends React.Component {
 
     render() {
         const dashboardApps = this.state.addedApps.map((app, index) => (
+
             <DashboardApp
                 onKeyPress={this.handleKeyPress}
                 image={app.image}
                 title={app.title}
                 key={app.id}
+                app={app.component}
                 onHover={() => this.handleHover(index)}
                 isActiveItem={this.state.activeItem === index}
                 id={app.id}
@@ -156,37 +154,43 @@ class App extends React.Component {
                 onChangeImage={event => this.handleImageChange(event, app.id)}
                 onDeleteItem={() => this.handleDeleteApp(app.id)}
             />
+
         ));
 
         return (
             <div>
                 <div style={container}>
-                    <Calculator />
                     <div className={styles.dashboard__button}>
                         <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.medium}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
                                 apps={this.state.apps} addedApps={this.state.addedApps} />} />
                     </div>
-                    <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
+                    <Router>
+                        <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
+                    </Router>
+
                 </div>
             </div>
         );
     }
 }
 
+
+
+
 export default App;
 
 injectGlobal`
-  body {
-    background-color: #111518;
-  }
-
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: Helvetica, Arial, sans-serif;
-  }
+    body {
+      background-color: #111518;
+    }
+        
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: Helvetica, Arial, sans-serif;       
+    }
 `;
 
 const container = {
@@ -197,13 +201,54 @@ const container = {
 
 const styles = {
     dashboard__wrapper: css`
-      display: flex;
-      flex-wrap: wrap;
-      padding: 50px 0 50px 0;
-    `,
+              display: flex;
+              flex-wrap: wrap;
+              padding: 50px 0 50px 0;
+            `,
 
     dashboard__button: css`
-      text-align: right;
-      margin: 90px 25px 0 0;
-    `
+              text-align: right;
+              margin: 90px 25px 0 0;
+            `,
+
+    dashboard__item: css`
+              cursor: pointer;
+              flex: 0 0 33.333333%;
+              max-width: 33.333333%;
+              padding: 10px;
+        
+      @media (max-width: 1023px) and (min-width: 570px) {
+                flex: 0 0 50%;
+            max-width: 50%;
+          }
+    
+      @media (max-width: 569px) {
+                flex: 0 0 100%;
+            max-width: 100%;
+          }
+       `,
+
+    window_app: css`
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    `,
+
+    window_app__wrapper: css`
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 600px;
+        width: 100%;
+        padding: 80px 50px;
+        border-radius: 10px;
+        border: 2px solid gray;
+        background: black;
+    `,
 };
