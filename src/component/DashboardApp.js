@@ -20,8 +20,6 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
         { [styles.dashboard__item_wrapper]: !isActiveItem }
       )}>
         <div>
-
-
           <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
             {!image && <ImageUpload icon={Icons.fileUpload} color={Colors.grayLight} size={Size.big} onChange={onChangeImage} image={image} />
             }
@@ -66,9 +64,11 @@ const WindowApp = ({ app }) => {
   return (
     <div className={styles.window_app}>
       <div className={styles.window_app__wrapper}>
-        <Link className={styles.window_app__close} to="/">
-          <GetIcon type={Icons.close} color={Colors.white} size={Size.medium} />
-        </Link>
+        <div className={styles.window_app__close} >
+          <Link to="/">
+            <GetIcon type={Icons.close} color={Colors.white} size={Size.medium} />
+          </Link>
+        </div>
         {app}
       </div>
     </div>
