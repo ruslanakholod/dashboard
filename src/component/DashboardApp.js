@@ -9,6 +9,8 @@ import { Colors, Icons, Size, GetIcon } from '../variables';
 
 function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image }) {
 
+  let urlTitle = title.replace(/ /sg, '_').replace(/[,.:]+/g, "").toLowerCase();
+
   return (
     <div
       className={styles.dashboard__item}
@@ -29,7 +31,7 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
               left: '0',
               top: '0',
               width: '100%'
-            }} to={`/${title}`}>
+            }} to={`/${urlTitle}`}>
             </Link>
             <SmallButton color={Colors.white} size={Size.small} icon={Icons.keypad}>
               <ul className={styles.list}>
@@ -55,21 +57,24 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
           />
         </div>
       </div>
-      <Route path={`/${title}`} render={(props) => <WindowApp {...props} app={app} />} />
+      <Route path={`/${urlTitle}`} render={(props) => <WindowApp {...props} title={title} app={app} />} />
     </div>
   );
 }
 
-const WindowApp = ({ app }) => {
+const WindowApp = ({ app, title }) => {
   return (
     <div className={styles.window_app}>
       <div className={styles.window_app__wrapper}>
         <div className={styles.window_app__close} >
           <Link to="/">
-            <GetIcon type={Icons.close} color={Colors.white} size={Size.medium} />
+            <GetIcon type={Icons.close} color={Colors.white} size={Size.big} />
           </Link>
         </div>
-        {app}
+        <p>{title}</p>
+        <div className={styles.app__wrapper}>
+          {app}
+        </div>
       </div>
     </div>
   );
@@ -164,30 +169,44 @@ const styles = {
         overflow: auto;
         background-color: rgba(0,0,0,0.4);
         cursor: default;
+
+      p {
+        font-size: 49px;
+        color: #fff;
+
+        @media (max-width: 569px) {
+          padding: 30px 50px 30px 30px;
+          font-size: 36px;
+        }
+      }
     `,
 
   window_app__wrapper: css`
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        max-width: 600px;
-        width: 100%;
-        padding: 60px 50px;
-        border-radius: 10px;
-        border: 2px solid gray;
-        background: black;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 50px;
+    background: black;
 
-        @media (max-width: 569px) {
-         padding: 50px 30px;
-        }
-    `,
-  window_app__close: css`
+    @media (max-width: 569px) {
+      padding: 30px;
+    }   
+  `,
+
+  app__wrapper: css`
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  `,
+
+  window_app__close: css`
+    position: absolute;
+    top: 50px;
+    right: 50px;
     line-height: 0;
     margin-bottom: 40px;
-    `,
+  `,
 };
 
 export default DashboardApp;

@@ -14,12 +14,13 @@ let id = 1;
 class App extends React.Component {
     state = {
         addedApps: [
-            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
             { id: id++, image: "/images/img_2.JPG", title: "Title2", component: '' },
-            { id: id++, image: "/images/img_3.JPG", title: "Title3", component: <Calculator /> }
+            { id: id++, image: "/images/img_3.JPG", title: "Title3", component: <Calculator /> },
+            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
+
         ],
         apps: [
-            { id: 'la', image: "/images/img_9.JPG", title: "Go to the store" },
+            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
             { id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill" },
             { id: 'ga', image: "/images/img_5.JPG", title: "Pets: Cats, Dogs, and Beyond" },
             { id: id++, image: "/images/img_1.JPG", title: "Title1" },
@@ -161,7 +162,7 @@ class App extends React.Component {
             <div>
                 <div style={container}>
                     <div className={styles.dashboard__button}>
-                        <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.medium}
+                        <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.big}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
                                 apps={this.state.apps} addedApps={this.state.addedApps} />} />
                     </div>
@@ -203,12 +204,12 @@ const styles = {
     dashboard__wrapper: css`
               display: flex;
               flex-wrap: wrap;
-              padding: 50px 0 50px 0;
+              padding: 30px 15px;
             `,
 
     dashboard__button: css`
               text-align: right;
-              margin: 90px 25px 0 0;
+              margin: 50px 35px 0 0;
             `,
 
     dashboard__item: css`

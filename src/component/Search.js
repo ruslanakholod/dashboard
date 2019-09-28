@@ -62,7 +62,7 @@ export default Search;
 const styles = {
     list__wrapper: css`
         text-align: left;
-        padding: 15px;
+        padding: 25px;
         
         ul {
             padding-top: 10px;
