@@ -28,7 +28,9 @@ class Search extends React.Component {
     };
 
     isAdded = (id) => {
-        return this.props.addedApps.some(app => app.id === id);
+        if (this.props.addedApps) {
+            return this.props.addedApps.some(app => app.id === id);
+        }
     }
 
     render() {

@@ -11,14 +11,12 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 let id = 1;
 
-class App extends React.Component {
-    state = {
-        addedApps: [
-            { id: id++, image: "/images/img_2.JPG", title: "Title2", component: '' },
-            { id: id++, image: "/images/img_3.JPG", title: "Title3", component: <Calculator /> },
-            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
 
-        ],
+class App extends React.Component {
+
+
+    state = {
+        addedApps: [],
         apps: [
             { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
             { id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill" },
@@ -32,6 +30,26 @@ class App extends React.Component {
         ],
         activeItem: 0
     };
+
+
+    componentDidUpdate() {
+        localStorage.setItem('addedApps', JSON.stringify(this.state.addedApps));
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", this.handleKeyPress);
+        let apps = JSON.parse(localStorage.getItem("addedApps"));
+
+        this.setState({
+            addedApps: apps
+        });
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKeyPress);
+    }
+
+
 
     handleHover = indexApp => {
         this.setState({
@@ -49,14 +67,6 @@ class App extends React.Component {
         const newItems = this.state.addedApps.map((item) => item.id === id ? { ...item, title: event.target.value } : item);
         this.setState({ addedApps: newItems });
     };
-
-    componentDidMount() {
-        document.addEventListener("keydown", this.handleKeyPress);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.handleKeyPress);
-    }
 
     handleKeyPress = event => {
         if (event.which === 37 || event.which === 38 || event.which === 39 || event.which === 40) {
@@ -132,31 +142,38 @@ class App extends React.Component {
             this.setState({ addedApps: newItems });
         };
         reader.readAsDataURL(file);
+
     };
 
     addAppToDashboard = (id) => {
         const app = this.state.apps.find(app => app.id === id);
-        this.setState({ addedApps: [app, ...this.state.addedApps] })
+        if (this.state.addedApps) {
+            this.setState({ addedApps: [app, ...this.state.addedApps] })
+        } else {
+            this.setState({ addedApps: [app] })
+        }
+
     };
 
     render() {
-        const dashboardApps = this.state.addedApps.map((app, index) => (
-
-            <DashboardApp
-                onKeyPress={this.handleKeyPress}
-                image={app.image}
-                title={app.title}
-                key={app.id}
-                app={app.component}
-                onHover={() => this.handleHover(index)}
-                isActiveItem={this.state.activeItem === index}
-                id={app.id}
-                onChangeInput={event => this.handleChangeInput(event, app.id)}
-                onChangeImage={event => this.handleImageChange(event, app.id)}
-                onDeleteItem={() => this.handleDeleteApp(app.id)}
-            />
-
-        ));
+        let dashboardApps;
+        if (this.state.addedApps !== null) {
+            dashboardApps = this.state.addedApps.map((app, index) => (
+                <DashboardApp
+                    onKeyPress={this.handleKeyPress}
+                    image={app.image}
+                    title={app.title}
+                    key={app.id}
+                    app={app.component}
+                    onHover={() => this.handleHover(index)}
+                    isActiveItem={this.state.activeItem === index}
+                    id={app.id}
+                    onChangeInput={event => this.handleChangeInput(event, app.id)}
+                    onChangeImage={event => this.handleImageChange(event, app.id)}
+                    onDeleteItem={() => this.handleDeleteApp(app.id)}
+                />
+            ));
+        }
 
         return (
             <div>

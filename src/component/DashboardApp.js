@@ -118,9 +118,9 @@ const styles = {
       width: 100%;
       border: none;
       outline-color: #566a77;
-      padding: 5px 15px;
+      padding: 10px;
       font-weight: 500;
-      font-size: 15px;
+      font-size: 16px;
       color: white;
       background-color: #1b2125;
     `,
