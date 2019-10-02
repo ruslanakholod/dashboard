@@ -3,66 +3,66 @@ import { css, cx } from 'emotion';
 
 class Search extends React.Component {
 
-    state = {
-        result: this.props.apps
-    };
+  state = {
+    result: this.props.apps
+  };
 
-    handleChange = (e) => {
-        let searchResult = [];
-        const searchRequest = e.target.value.trim().toLowerCase().split(' ');
+  handleChange = (e) => {
+    let searchResult = [];
+    const searchRequest = e.target.value.trim().toLowerCase().split(' ');
 
-        if (e.target.value.charAt(0) === ' ') {
-            e.target.value = '';
-        }
-
-        searchRequest.forEach(request => {
-            searchResult = this.props.apps.filter(app => {
-                const appTitle = app.title.toLowerCase();
-                return appTitle.indexOf(request) !== -1;
-            });
-        });
-
-        this.setState({
-            result: searchResult
-        });
-    };
-
-    isAdded = (id) => {
-        if (this.props.addedApps) {
-            return this.props.addedApps.some(app => app.id === id);
-        }
+    if (e.target.value.charAt(0) === ' ') {
+      e.target.value = '';
     }
 
-    render() {
-        return (
-            <div className={styles.list__wrapper}>
-                <div className={styles.list__search}>
-                    <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
-                </div>
-                <ul>
-                    {this.state.result.map(app => (
-                        <li className={styles.list__app} key={app.title}>
-                            <div className={styles.list__app_left}>
-                                <div className={css`  ${styles.list__app_img}; background-image: url(${app.image}); `} />
-                                <p className={styles.list__app_title}>{app.title}</p>
-                            </div>
-                            {this.isAdded(app.id) ?
-                                <div className={cx(styles.list__app_button, styles.list__app_button_added)}>Added</div>
-                                :
-                                <div className={styles.list__app_button} onClick={() => this.props.addApp(app.id)}>Add</div>
-                            }
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        )
+    searchRequest.forEach(request => {
+      searchResult = this.props.apps.filter(app => {
+        const appTitle = app.title.toLowerCase();
+        return appTitle.indexOf(request) !== -1;
+      });
+    });
+
+    this.setState({
+      result: searchResult
+    });
+  };
+
+  isAdded = (id) => {
+    if (this.props.addedApps) {
+      return this.props.addedApps.some(app => app.id === id);
     }
+  }
+
+  render() {
+    return (
+      <div className={styles.list__wrapper}>
+        <div className={styles.list__search}>
+          <input type="text" className="input" onChange={this.handleChange} placeholder="Search..." />
+        </div>
+        <ul>
+          {this.state.result.map(app => (
+            <li className={styles.list__app} key={app.title}>
+              <div className={styles.list__app_left}>
+                <div className={css`  ${styles.list__app_img}; background-image: url(${app.image}); `} />
+                <p className={styles.list__app_title}>{app.title}</p>
+              </div>
+              {this.isAdded(app.id) ?
+                <div className={cx(styles.list__app_button, styles.list__app_button_added)}>Added</div>
+                :
+                <div className={styles.list__app_button} onClick={() => this.props.addApp(app.id)}>Add</div>
+              }
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
 }
 
 export default Search;
 
 const styles = {
-    list__wrapper: css`
+  list__wrapper: css`
         text-align: left;
         padding: 25px;
         
@@ -71,7 +71,7 @@ const styles = {
             list-style: none;
         }
     `,
-    list__search: css`
+  list__search: css`
         input {
             width: 100%;
             padding: 8px;
@@ -82,19 +82,19 @@ const styles = {
         }
     `,
 
-    list__app: css`
+  list__app: css`
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 0;
     `,
 
-    list__app_left: css`
+  list__app_left: css`
         display: flex;
         align-items: center;
     `,
 
-    list__app_img: css`
+  list__app_img: css`
         flex-shrink: 0;
         margin-right: 20px;
         width: 65px;
@@ -110,14 +110,14 @@ const styles = {
         }   
     `,
 
-    list__app_title: css`
+  list__app_title: css`
         font-size: 20px;
         
         @media (max-width: 569px) {
              font-size: 16px;
         } 
     `,
-    list__app_button: css`
+  list__app_button: css`
         padding: 5px 10px 4px 10px;
         border: 2px solid #000;
         border-radius: 6px;
@@ -138,7 +138,7 @@ const styles = {
         }
     `,
 
-    list__app_button_added: css`
+  list__app_button_added: css`
        background: #000;
        color: #fff; 
     `

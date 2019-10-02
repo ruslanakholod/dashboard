@@ -4,6 +4,7 @@ import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
 import Calculator from './apps/Calculator';
+import Fly from './apps/Fly';
 import { Colors, Icons, Size } from './variables';
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -13,7 +14,6 @@ let id = 1;
 
 
 class App extends React.Component {
-
 
     state = {
         addedApps: [],
@@ -178,6 +178,7 @@ class App extends React.Component {
         return (
             <div>
                 <div style={container}>
+                    <Fly />
                     <div className={styles.dashboard__button}>
                         <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.big}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
