@@ -3,8 +3,6 @@ import { injectGlobal, css, cx } from 'emotion';
 import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
-import Calculator from './apps/Calculator';
-import Fly from './apps/Fly';
 import { Colors, Icons, Size } from './variables';
 import { BrowserRouter as Router } from "react-router-dom";
 
@@ -18,8 +16,8 @@ class App extends React.Component {
     state = {
         addedApps: [],
         apps: [
-            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: <Calculator /> },
-            { id: 'da', image: "/images/img_6.JPG", title: "Netflix and Chill" },
+            { id: 'calculator', image: "/images/img_1.JPG", title: "Calculator", component: 'Calculator' },
+            { id: 'fly', image: "/images/img_6.JPG", title: "Booking flight", component: 'Fly' },
             { id: 'ga', image: "/images/img_5.JPG", title: "Pets: Cats, Dogs, and Beyond" },
             { id: id++, image: "/images/img_1.JPG", title: "Title1" },
             { id: id++, image: "/images/img_2.JPG", title: "Title2" },
@@ -38,7 +36,7 @@ class App extends React.Component {
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
-        let apps = JSON.parse(localStorage.getItem("addedApps"));
+        let apps = JSON.parse(localStorage.getItem('addedApps'));
 
         this.setState({
             addedApps: apps
@@ -48,8 +46,6 @@ class App extends React.Component {
     componentWillUnmount() {
         document.removeEventListener("keydown", this.handleKeyPress);
     }
-
-
 
     handleHover = indexApp => {
         this.setState({
@@ -178,7 +174,6 @@ class App extends React.Component {
         return (
             <div>
                 <div style={container}>
-                    <Fly />
                     <div className={styles.dashboard__button}>
                         <RoundButton icon={Icons.circlePlus} color={Colors.white} size={Size.big}
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
@@ -187,14 +182,11 @@ class App extends React.Component {
                     <Router>
                         <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
                     </Router>
-
                 </div>
             </div>
         );
     }
 }
-
-
 
 
 export default App;
@@ -210,6 +202,10 @@ injectGlobal`
       box-sizing: border-box;
       font-family: Helvetica, Arial, sans-serif;       
     }
+
+    button:disabled {
+      cursor: not-allowed;
+    }  
 `;
 
 const container = {

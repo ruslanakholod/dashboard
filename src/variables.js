@@ -1,9 +1,12 @@
 import React from 'react';
 import * as IconIo from 'react-icons/io';
 import * as IconMd from 'react-icons/md';
+import Calculator from './apps/Calculator';
+import Fly from './apps/Fly';
 
 export const Colors = {
     white: '#fff',
+    black: '#000',
     grayLight: 'rgb(204, 204, 204)'
 }
 
@@ -38,5 +41,13 @@ export function GetIcon({ type, size, color }) {
         return <IconIo.IoIosCloseCircleOutline color={color} size={size} />;
     } else if (type === 'arrowDown') {
         return <IconIo.IoIosArrowDown color={color} size={size} />;
+    }
+}
+
+export function GetApp({ app }) {
+    if (app === 'Calculator') {
+        return <Calculator />;
+    } else if (app === 'Fly') {
+        return <Fly />;
     }
 }

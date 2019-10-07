@@ -17,7 +17,7 @@ class SmallButton extends React.Component {
     document.removeEventListener('click', this.handleClickOutside);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     document.addEventListener('click', this.handleClickOutside);
   }
 

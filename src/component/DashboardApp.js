@@ -4,7 +4,7 @@ import '.././App.css';
 import ImageUpload from './ImageUpload';
 import SmallButton from "./SmallButton";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Colors, Icons, Size, GetIcon } from '../variables';
+import { Colors, Icons, Size, GetIcon, GetApp } from '../variables';
 
 
 function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image }) {
@@ -71,9 +71,9 @@ const WindowApp = ({ app, title }) => {
             <GetIcon type={Icons.close} color={Colors.white} size={Size.big} />
           </Link>
         </div>
-        <p>{title}</p>
+        <p className={styles.window_app__title}>{title}</p>
         <div className={styles.app__wrapper}>
-          {app}
+          <GetApp app={app} />
         </div>
       </div>
     </div>
@@ -169,16 +169,16 @@ const styles = {
         overflow: auto;
         background-color: rgba(0,0,0,0.4);
         cursor: default;
+    `,
 
-      p {
-        font-size: 49px;
+  window_app__title: css`
+     font-size: 49px;
         color: #fff;
 
         @media (max-width: 569px) {
           padding: 30px 50px 30px 30px;
-          font-size: 36px;
+          font-size: 30px;
         }
-      }
     `,
 
   window_app__wrapper: css`
@@ -189,7 +189,7 @@ const styles = {
     background: black;
 
     @media (max-width: 569px) {
-      padding: 30px;
+      padding: 30px 15px;
     }   
   `,
 
