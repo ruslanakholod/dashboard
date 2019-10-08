@@ -1,10 +1,12 @@
 import React from 'react';
 import { css, cx } from 'emotion';
+import App from './../App'
 import '.././App.css';
 import ImageUpload from './ImageUpload';
 import SmallButton from "./SmallButton";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Colors, Icons, Size, GetIcon, GetApp } from '../variables';
+import Calculator from '../apps/Calculator';
 
 
 function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image }) {
@@ -25,13 +27,15 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
           <div className={css` ${styles.dashboard__item_img}; background-image: url(${image}); `}>
             {!image && <ImageUpload icon={Icons.fileUpload} color={Colors.grayLight} size={Size.big} onChange={onChangeImage} image={image} />
             }
-            <Link style={{
-              position: 'absolute',
-              height: '100%',
-              left: '0',
-              top: '0',
-              width: '100%'
-            }} to={`/${urlTitle}`}>
+            <Link
+              style={{
+                position: 'absolute',
+                height: '100%',
+                left: '0',
+                top: '0',
+                width: '100%'
+              }}
+              to={`/${urlTitle}`}>
             </Link>
             <SmallButton color={Colors.white} size={Size.small} icon={Icons.keypad}>
               <ul className={styles.list}>
@@ -57,8 +61,7 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
           />
         </div>
       </div>
-      <Route path={`/${urlTitle}`} render={(props) => <WindowApp {...props} title={title} app={app} />} />
-    </div>
+      <Route path={`/${urlTitle}`} render={(props) => <WindowApp {...props} title={title} app={app} />} />    </div>
   );
 }
 
@@ -84,102 +87,102 @@ const styles = {
 
 
   dashboard__item_wrapper: css`
-      position: relative;
-      padding: 15px;
-    `,
+    position: relative;
+    padding: 15px;
+  `,
 
   dashboard__item: css`
-              cursor: pointer;
-              flex: 0 0 33.333333%;
-              max-width: 33.333333%;
-              padding: 10px;
-        
-      @media (max-width: 1023px) and (min-width: 570px) {
-                flex: 0 0 50%;
-            max-width: 50%;
-          }
+    cursor: pointer;
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding: 10px;
+       
+    @media (max-width: 1023px) and (min-width: 570px) {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
     
-      @media (max-width: 569px) {
-                flex: 0 0 100%;
-            max-width: 100%;
-          }
-       `,
+    @media (max-width: 569px) {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  `,
 
   dashboard__item_img: css`
     position: relative;
-      min-height: 200px;
-      background-position: center;
-      background-size: cover;
-      background-repeat: no-repeat;
-      cursor: pointer;
-    `,
+    min-height: 200px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  `,
 
   dashboard__item_title: css`
-      width: 100%;
-      border: none;
-      outline-color: #566a77;
-      padding: 10px;
-      font-weight: 500;
-      font-size: 16px;
-      color: white;
-      background-color: #1b2125;
-    `,
+    width: 100%;
+    border: none;
+    outline-color: #566a77;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    color: white;
+    background-color: #1b2125;
+  `,
 
   list: css`
-        display: inline-block;
-        margin-right: 20px;
-        list-style: none;
-        background-color: #ffffffba;
-        border-radius: 3px;
+    display: inline-block;
+    margin-right: 20px;
+    list-style: none;
+    background-color: #ffffffba;
+    border-radius: 3px;
         
-        li {
-          font-size: 14px;
-          padding: 8px;
-          cursor: pointer;
-          
-          label {
-            cursor: pointer;
-          }
-        }
+    li {
+      font-size: 14px;
+      padding: 8px;
+      cursor: pointer;
+       
+      label {
+        cursor: pointer;
+      }
+    }
         
-        p {
-          font-size: 14px;
-          padding: 8px;
-        }
+    p {
+      font-size: 14px;
+      padding: 8px;
+    }
         
-        input[type=file] {
-          position: absolute;
-          z-index: -1;
-          width: 1px;
-          height: 1px;
-          outline: 0;
-          opacity: 0;
-          pointer-events: none;
-          user-select: none
-        }
-    
-    `,
+    input[type=file] {
+      position: absolute;
+      z-index: -1;
+      width: 1px;
+      height: 1px;
+      outline: 0;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none
+    }
+  `,
+
   window_app: css`
-        position: fixed;
-        z-index: 2;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4);
-        cursor: default;
-    `,
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    cursor: default;
+  `,
 
   window_app__title: css`
-     font-size: 49px;
-        color: #fff;
+    font-size: 49px;
+    color: #fff;
 
-        @media (max-width: 569px) {
-          padding: 30px 50px 30px 30px;
-          font-size: 30px;
-        }
-    `,
+    @media (max-width: 569px) {
+      padding: 30px 50px 30px 30px;
+      font-size: 30px;
+    }
+  `,
 
   window_app__wrapper: css`
     position: fixed;

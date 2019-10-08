@@ -4,12 +4,8 @@ import DashboardApp from './component/DashboardApp';
 import Search from './component/Search';
 import RoundButton from './component/RoundButton';
 import { Colors, Icons, Size } from './variables';
-import { BrowserRouter as Router } from "react-router-dom";
-
-
 
 let id = 1;
-
 
 class App extends React.Component {
 
@@ -179,9 +175,7 @@ class App extends React.Component {
                             search={<Search addApp={(id) => this.addAppToDashboard(id)}
                                 apps={this.state.apps} addedApps={this.state.addedApps} />} />
                     </div>
-                    <Router>
-                        <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
-                    </Router>
+                    <div className={cx(styles.dashboard__wrapper, 'dashboard')}>{dashboardApps}</div>
                 </div>
             </div>
         );

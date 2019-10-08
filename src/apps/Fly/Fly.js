@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { css, cx } from 'emotion';
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Colors, Icons, Size, GetIcon } from '../variables';
+import { Colors, Icons, Size, GetIcon } from '../../variables';
+import { Route, withRouter } from "react-router";
+import BookingResult from './BookingResult';
+import CouterPassengers from './CouterPassengers';
 
 class Fly extends React.Component {
 
@@ -15,7 +18,7 @@ class Fly extends React.Component {
       way: null,
       startDate: null,
       endDate: null,
-      passengers: null
+      passengers: 1
     },
 
     departures: [
@@ -35,14 +38,16 @@ class Fly extends React.Component {
     selectedWay: "oneWay",
     startDate: null,
     endDate: null,
+    totalPassengers: 1,
     passengers: {
-      total: 1,
       adults: 1,
       children: 0,
       infants: 0
     },
 
-    isHidden: true
+    isHidden: true,
+    dateError: "",
+    countryError: ""
   };
 
   isHidden = () => {
@@ -97,7 +102,7 @@ class Fly extends React.Component {
   };
 
   countPassengers = (type) => {
-    let total = this.state.passengers.total;
+    let total = this.state.totalPassengers;
     let adults = this.state.passengers.adults;
     let children = this.state.passengers.children;
     let infants = this.state.passengers.infants;
@@ -105,8 +110,8 @@ class Fly extends React.Component {
     if (type === 'incrementAdult') {
       if (adults < 5) {
         this.setState({
+          totalPassengers: total + 1,
           passengers: {
-            total: total + 1,
             adults: adults + 1,
             children: children,
             infants: infants
@@ -118,8 +123,8 @@ class Fly extends React.Component {
     else if (type === 'decrementAdult') {
       if (adults > 1 && total > 1 && infants < 1) {
         this.setState({
+          totalPassengers: total - 1,
           passengers: {
-            total: total - 1,
             adults: adults - 1,
             children: children,
             infants: infants
@@ -127,8 +132,8 @@ class Fly extends React.Component {
         });
       } else if (adults > 1 && total > 1 && infants > 1) {
         this.setState({
+          totalPassengers: total - 2,
           passengers: {
-            total: total - 2,
             adults: adults - 1,
             infants: infants - 1,
             children: children
@@ -140,8 +145,8 @@ class Fly extends React.Component {
     else if (type === 'incrementChildren') {
       if (children < 3 && children + infants < 5 && total < 10 && adults + children < 5) {
         this.setState({
+          totalPassengers: total + 1,
           passengers: {
-            total: total + 1,
             children: children + 1,
             adults: adults,
             infants: infants
@@ -153,6 +158,7 @@ class Fly extends React.Component {
     else if (type === 'decrementChildren') {
       if (children > 0) {
         this.setState({
+          totalPassengers: total - 1,
           passengers: {
             total: total - 1,
             children: children - 1,
@@ -166,8 +172,8 @@ class Fly extends React.Component {
     else if (type === 'incrementInfants') {
       if (infants < adults) {
         this.setState({
+          totalPassengers: total + 1,
           passengers: {
-            total: total + 1,
             infants: infants + 1,
             adults: adults,
             children: children
@@ -179,8 +185,8 @@ class Fly extends React.Component {
     else if (type === 'decrementInfants') {
       if (infants > 0) {
         this.setState({
+          totalPassengers: total - 1,
           passengers: {
-            total: total - 1,
             infants: infants - 1,
             children: children,
             adults: adults
@@ -190,151 +196,194 @@ class Fly extends React.Component {
     }
   }
 
+  validate = () => {
+    let dateError = "";
+    let countryError = "";
+
+    if (!this.state.selectedDeparture || !this.state.selectedArrival) {
+      countryError = "This field is required";
+    } else {
+      countryError = null;
+    }
+
+    if (this.state.selectedWay === 'oneWay') {
+      if (!this.state.startDate) {
+        dateError = "This field is required";
+      } else {
+        dateError = null;
+      }
+    } else {
+      if (!this.state.startDate || !this.state.endDate) {
+        dateError = "This field is required";
+      } else {
+        dateError = null;
+      }
+    }
+
+    this.setState({ countryError, dateError });
+
+    if (countryError || dateError) {
+      return false;
+    } else {
+      return true;
+    }
+
+  };
+
   onSubmitForm = (e) => {
     e.preventDefault();
-    this.setState({
-      formData: {
-        departure: this.state.selectedDeparture ? this.state.selectedDeparture.value : this.state.selectedDeparture,
-        arrival: this.state.selectedArrival ? this.state.selectedArrival.value : this.state.selectedArrival,
-        way: this.state.selectedWay,
-        startDate: this.state.startDate,
-        endDate: this.state.endDate,
-        passengers: this.state.passengers
-      }
-    }, () => {
-      console.log(this.state.formData);
-    });
+    const isValid = this.validate();
 
+    if (isValid) {
+      this.setState({
+        formData: {
+          departure: this.state.selectedDeparture ? this.state.selectedDeparture.value : this.state.selectedDeparture,
+          arrival: this.state.selectedArrival ? this.state.selectedArrival.value : this.state.selectedArrival,
+          way: this.state.selectedWay,
+          startDate: this.state.startDate,
+          endDate: this.state.endDate,
+          passengers: this.state.totalPassengers
+        },
+
+        // clear form
+
+        selectedDeparture: null,
+        selectedArrival: null,
+        selectedWay: "oneWay",
+        startDate: null,
+        endDate: null,
+        totalPassengers: 1,
+        passengers: {
+          adults: 1,
+          children: 0,
+          infants: 0
+        }
+      });
+      this.props.history.push('/booking_flight/ticket');
+    }
   }
 
   render() {
-    const { passengers, selectedDeparture, departures, arrivals, selectedArrival, startDate, endDate } = this.state;
-
+    const { totalPassengers, passengers, selectedDeparture, departures, arrivals, selectedArrival, startDate, endDate } = this.state;
     const filteredArrivals = selectedDeparture ? arrivals.filter(country => country.value !== selectedDeparture.value) : arrivals;
 
     return (
       <div className={styles.booking}>
-        {/* <p className={styles.booking__title}> Book Flights</p> */}
-        <form className={styles.booking__form}>
-          <div className={styles.booking__location}>
-            <div className={styles.booking__location_select}>
-              <Select
-                styles={customStyles}
-                value={selectedDeparture}
-                onChange={this.handleChangeDeparture}
-                options={departures}
-              />
-            </div>
-            <div className={styles.booking__location_select}>
-              <Select
-                styles={customStyles}
-                value={selectedArrival}
-                onChange={this.handleChangeArrival}
-                options={filteredArrivals}
-              />
-            </div>
-          </div>
+        <Route path={`/booking_flight/ticket`} render={(props) => <BookingResult {...props} data={this.state.formData} />} />
 
-          <div className={styles.booking__way}>
-            <ul>
-              <li>
-                <input
-                  id="oneWay"
-                  type="radio"
-                  name="oneWay"
-                  value="oneWay"
-                  checked={this.state.selectedWay === "oneWay"}
-                  onChange={this.handleChangeWay} />
-                <label htmlFor="oneWay">One-way</label>
-                <div className="check"></div>
-              </li>
-              <li>
-                <input
-                  id="return"
-                  type="radio"
-                  name="return"
-                  value="return"
-                  checked={this.state.selectedWay === "return"}
-                  onChange={this.handleChangeWay} />
-                <label htmlFor="return">Return</label>
-                <div className="check"></div>
-              </li>
-            </ul>
-          </div>
+        {this.props.location.pathname !== '/booking_flight/ticket' &&
 
-          <div className={styles.booking__date}>
-            <div className={styles.booking__date__wrapper}>
-              <DatePicker
-                className={styles.booking__date}
-                selected={startDate}
-                onChange={this.handleChangeStartDate}
-                selectsStart
-                startDate={startDate}
-                endDate={endDate}
-                placeholderText="Click to select a date"
-              />
+          <form className={styles.booking__form} onSubmit={e => this.onSubmitForm(e)}>
+            <div className={styles.booking__location}>
+              <div className={styles.booking__location_select}>
+                <Select
+                  styles={customStyles}
+                  value={selectedDeparture}
+                  onChange={this.handleChangeDeparture}
+                  options={departures}
+                  required
+                />
+              </div>
+              <div className={styles.booking__location_select}>
+                <Select
+                  styles={customStyles}
+                  value={selectedArrival}
+                  onChange={this.handleChangeArrival}
+                  options={filteredArrivals}
+                  required
+                />
+              </div>
             </div>
-            <div className={styles.booking__date__wrapper}>
-              {this.state.selectedWay === 'return' &&
+            <div className={styles.required}>
+              {this.state.countryError}
+            </div>
+
+            <div className={styles.booking__way}>
+              <ul>
+                <li>
+                  <input
+                    id="oneWay"
+                    type="radio"
+                    name="oneWay"
+                    value="oneWay"
+                    checked={this.state.selectedWay === "oneWay"}
+                    onChange={this.handleChangeWay} />
+                  <label htmlFor="oneWay">One-way</label>
+                  <div className="check"></div>
+                </li>
+                <li>
+                  <input
+                    id="return"
+                    type="radio"
+                    name="return"
+                    value="return"
+                    checked={this.state.selectedWay === "return"}
+                    onChange={this.handleChangeWay} />
+                  <label htmlFor="return">Return</label>
+                  <div className="check"></div>
+                </li>
+              </ul>
+            </div>
+
+            <div className={styles.booking__date}>
+              <div className={styles.booking__date__wrapper}>
                 <DatePicker
-                  selected={endDate}
-                  onChange={this.handleChangeEndDate}
-                  selectsEnd
+                  className={styles.booking__date}
+                  selected={startDate}
+                  onChange={this.handleChangeStartDate}
+                  selectsStart
+                  startDate={startDate}
                   endDate={endDate}
-                  minDate={startDate}
                   placeholderText="Click to select a date"
                 />
+              </div>
+              <div className={styles.booking__date__wrapper}>
+                {this.state.selectedWay === 'return' &&
+                  <DatePicker
+                    selected={endDate}
+                    onChange={this.handleChangeEndDate}
+                    selectsEnd
+                    endDate={endDate}
+                    minDate={startDate}
+                    placeholderText="Click to select a date"
+                  />
+                }
+              </div>
+            </div>
+            <div className={styles.required}>
+              {this.state.dateError}
+            </div>
+
+            <div ref={this.setWrapperRef} className={styles.booking__passengers}>
+              <div onClick={this.isHidden} className={styles.booking__passengers__total}>
+                <div className={styles.booking__passengers__total_text}>
+                  <p>{totalPassengers} {totalPassengers > 1 ? 'passengers' : 'passenger'}</p>
+                  <p>{passengers.adults} {passengers.adults > 1 ? 'adults, ' : 'adult, '}
+                    {passengers.children} {passengers.children > 1 ? 'children, ' : 'child, '}
+                    {passengers.infants} {passengers.infants > 1 ? 'infants' : 'infant'}</p>
+                </div>
+                <span></span>
+                <div className={styles.booking__passengers__total_button}>
+                  <GetIcon type={Icons.arrowDown} color={Colors.grayLight} size={Size.exstraSmall} />
+                </div>
+              </div>
+              {!this.state.isHidden &&
+                <div className={styles.booking__passengers__menu}>
+                  <CouterPassengers passengers={passengers.adults} title='adult' pluralTitle='adults' description='from 12 years' onIncrement={() => this.countPassengers('incrementAdult')} onDecrement={() => this.countPassengers('decrementAdult')} />
+                  <CouterPassengers passengers={passengers.children} title='child' pluralTitle='children' description='2-11 years' onIncrement={() => this.countPassengers('incrementChildren')} onDecrement={() => this.countPassengers('decrementChildren')} />
+                  <CouterPassengers passengers={passengers.infants} title='infant' pluralTitle='infants' description='up to 2 year' onIncrement={() => this.countPassengers('incrementInfants')} onDecrement={() => this.countPassengers('decrementInfants')} />
+                </div>
               }
             </div>
-          </div>
-
-          <div ref={this.setWrapperRef} className={styles.booking__passengers}>
-            <div onClick={this.isHidden} className={styles.booking__passengers__total}>
-              <div className={styles.booking__passengers__total_text}>
-                <p>{passengers.total} {passengers.total > 1 ? 'passengers' : 'passenger'}</p>
-                <p>{passengers.adults} {passengers.adults > 1 ? 'adults, ' : 'adult, '}
-                  {passengers.children} {passengers.children > 1 ? 'children, ' : 'child, '}
-                  {passengers.infants} {passengers.infants > 1 ? 'infants' : 'infant'}</p>
-              </div>
-              <span></span>
-              <div className={styles.booking__passengers__total_button}>
-                <GetIcon type={Icons.arrowDown} color={Colors.grayLight} size={Size.exstraSmall} />
-              </div>
-            </div>
-            {!this.state.isHidden &&
-              <div className={styles.booking__passengers__menu}>
-                <CouterPassengers passengers={passengers.adults} title='adult' pluralTitle='adults' description='from 12 years' onIncrement={() => this.countPassengers('incrementAdult')} onDecrement={() => this.countPassengers('decrementAdult')} />
-                <CouterPassengers passengers={passengers.children} title='child' pluralTitle='children' description='2-11 years' onIncrement={() => this.countPassengers('incrementChildren')} onDecrement={() => this.countPassengers('decrementChildren')} />
-                <CouterPassengers passengers={passengers.infants} title='infant' pluralTitle='infants' description='up to 2 year' onIncrement={() => this.countPassengers('incrementInfants')} onDecrement={() => this.countPassengers('decrementInfants')} />
-              </div>
-            }
-          </div>
-          <button className={styles.booking__button} onClick={e => this.onSubmitForm(e)} type="submit">Search</button>
-        </form>
-      </div >
+            <button className={styles.booking__button} type="submit">Search</button>
+          </form>
+        }
+      </div>
     )
   }
 }
 
-function CouterPassengers({ passengers, title, pluralTitle, description, onIncrement, onDecrement }) {
-  return (
-    <div className={styles.booking__passengers__count}>
-      <div className={styles.booking__passengers__count_title}>
-        {passengers} {passengers > 1 ? pluralTitle : title} <span>{description}</span>
-      </div>
-      <div className={styles.booking__passengers__count_buttons}>
-        <div onClick={onIncrement} >
-          <GetIcon type={Icons.circlePlus} color={Colors.black} size={Size.small} />
-        </div>
-        <div onClick={onDecrement}>
-          <GetIcon type={Icons.circleMinus} color={Colors.black} size={Size.small} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
-export default Fly;
+export default withRouter(Fly);
 
 const styles = {
 
@@ -556,36 +605,6 @@ const styles = {
     }
   `,
 
-  booking__passengers__count: css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom:1px solid black;
-    color:black;
-    padding:10px;
-
-    * {
-      user-select: none; 
-    }
-  `,
-
-  booking__passengers__count_title: css`
-    
-    span {
-      font-size: 13px;
-      color: rgb(154, 154, 154);
-    }
-  `,
-
-  booking__passengers__count_buttons: css`
-    display: flex;
-    
-    div {
-      margin-left: 10px;
-      line-height: 0;
-    }
-  `,
-
   booking__button: css`
     margin: 20px 20px;
     width: 100%;
@@ -609,6 +628,11 @@ const styles = {
       background: #000;  
       transition: 0.2s background;
     }
+  `,
+
+  required: css`
+    margin: 10px 0 0 20px;
+    color: red;
   `
 }
 

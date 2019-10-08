@@ -2,7 +2,7 @@ import React from 'react';
 import * as IconIo from 'react-icons/io';
 import * as IconMd from 'react-icons/md';
 import Calculator from './apps/Calculator';
-import Fly from './apps/Fly';
+import Fly from './apps/Fly/Fly';
 
 export const Colors = {
     white: '#fff',
