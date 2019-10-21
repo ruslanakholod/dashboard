@@ -1,13 +1,9 @@
 import React from 'react';
 import { css, cx } from 'emotion';
-import App from './../App'
-import '.././App.css';
 import ImageUpload from './ImageUpload';
 import SmallButton from "./SmallButton";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Colors, Icons, Size, GetIcon, GetApp } from '../variables';
-import Calculator from '../apps/Calculator';
-
 
 function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, onDeleteItem, onChangeImage, image }) {
 
@@ -56,8 +52,9 @@ function DashboardApp({ app, title, onHover, isActiveItem, id, onChangeInput, on
             className={styles.dashboard__item_title}
             type="text"
             value={title}
-            onChange={onChangeInput}
+            // onChange={onChangeInput}
             placeholder='Add some text'
+            disabled="disabled"
           />
         </div>
       </div>

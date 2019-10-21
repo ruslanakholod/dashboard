@@ -1,5 +1,5 @@
 import React from 'react';
-import { css, cx } from 'emotion';
+import { css } from 'emotion';
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -259,7 +259,7 @@ class Fly extends React.Component {
           infants: 0
         }
       });
-      this.props.history.push('/booking_flight/ticket');
+      this.props.history.push('/bookfly/ticket');
     }
   }
 
@@ -269,9 +269,9 @@ class Fly extends React.Component {
 
     return (
       <div className={styles.booking}>
-        <Route path={`/booking_flight/ticket`} render={(props) => <BookingResult {...props} data={this.state.formData} />} />
+        <Route path={`/bookfly/ticket`} render={(props) => <BookingResult {...props} data={this.state.formData} />} />
 
-        {this.props.location.pathname !== '/booking_flight/ticket' &&
+        {this.props.location.pathname !== '/bookfly/ticket' &&
 
           <form className={styles.booking__form} onSubmit={e => this.onSubmitForm(e)}>
             <div className={styles.booking__location}>
@@ -606,7 +606,7 @@ const styles = {
   `,
 
   booking__button: css`
-    margin: 20px 20px;
+    margin: 20px 20px 100px 20px;
     width: 100%;
     max-width: 200px;
     height: 40px;
@@ -620,7 +620,7 @@ const styles = {
     outline: none;
 
     @media (max-width: 569px) {
-      margin: 40px 0 100px 0;
+      margin: 40px 0 150px 0;
     }
         
     &:hover {

@@ -3,6 +3,7 @@ import * as IconIo from 'react-icons/io';
 import * as IconMd from 'react-icons/md';
 import Calculator from './apps/Calculator';
 import Fly from './apps/Fly/Fly';
+import NoApp from './apps/NoApp';
 
 export const Colors = {
     white: '#fff',
@@ -49,5 +50,7 @@ export function GetApp({ app }) {
         return <Calculator />;
     } else if (app === 'Fly') {
         return <Fly />;
+    } else if (app === 'NoApp') {
+        return <NoApp />;
     }
 }
